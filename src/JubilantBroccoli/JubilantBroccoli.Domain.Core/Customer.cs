@@ -1,8 +1,6 @@
-﻿using JubilantBroccoli.Domain.Core.Interfaces;
+﻿namespace JubilantBroccoli.Domain.Models;
 
-namespace JubilantBroccoli.Domain.Models;
-
-public class Customer: IHaveId
+public class Customer: Person
 {
-    public Guid Id { get; set; }
+    public string? Address { get; set; }
 }

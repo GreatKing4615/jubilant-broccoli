@@ -1,11 +1,14 @@
-﻿using JubilantBroccoli.Domain.Core.Interfaces;
+﻿using JubilantBroccoli.Domain.Core.Enums;
+using JubilantBroccoli.Domain.Core.Implementations;
 
 namespace JubilantBroccoli.Domain.Models;
 
-public class Order: IAuditable
+public class Order: Auditable
 {
-    public DateTime CreatedAt { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    public string UpdatedBy { get; set; }
+    public Customer Customer { get; set; }
+    public string DeliveryAddress { get; set; }
+    public OrderStatus Status { get; set; }
+    public ICollection<Dish> Dishes { get; set; }
+    public DeliverType DeliverType { get; set; }
+    public string? DeliverAddress { get; set; }
 }
