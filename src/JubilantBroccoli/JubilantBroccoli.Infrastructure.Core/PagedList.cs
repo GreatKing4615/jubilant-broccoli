@@ -1,6 +1,6 @@
-﻿using JubilantBroccoli.Infrastructure.UnitOfWork.Interfaces;
+﻿using JubilantBroccoli.Infrastructure.Core.Interfaces;
 
-namespace JubilantBroccoli.Infrastructure.UnitOfWork;
+namespace JubilantBroccoli.Infrastructure.Core;
 
 /// <summary>
 /// Provides some help methods for <see cref="IPagedList{T}"/> interface.

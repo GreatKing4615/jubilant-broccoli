@@ -1,4 +1,3 @@
-using Facttopus.Web.Data;
 using JubilantBroccoli;
 using JubilantBroccoli.Domain.Core.Implementations;
 using JubilantBroccoli.Infrastructure.Core.Base;

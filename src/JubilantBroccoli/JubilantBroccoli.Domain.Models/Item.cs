@@ -1,13 +1,15 @@
 ﻿using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Core.Implementations;
+using JubilantBroccoli.Domain.Core.Interfaces;
 
 namespace JubilantBroccoli.Domain.Models;
 
 /// <summary>
 /// 
 /// </summary>
-public class Item : Auditable
+public class Item:IHaveId
 {
+    public long Id { get; set; }
     public string Name { get; set; }
     public double Price { get; set; }
     public TimeSpan CookingTime { get; set; }
@@ -15,4 +17,5 @@ public class Item : Auditable
     public Unit Unit { get; set; }
     public ItemType Type { get; set; }
     public ICollection<ItemOption> ItemOptions { get; set; }
+    public ICollection<Restaurant> Restaurants { get; set; }
 }

@@ -12,4 +12,9 @@
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JubilantBroccoli.Domain.Core\JubilantBroccoli.Domain.Models.csproj" />
+    <ProjectReference Include="..\JubilantBroccoli.Entities.Base\JubilantBroccoli.Domain.Core.csproj" />
+  </ItemGroup>
+
 </Project>

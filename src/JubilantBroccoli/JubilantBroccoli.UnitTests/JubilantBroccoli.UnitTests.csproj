@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JubilantBroccoli.Infrastructure.Mappers\JubilantBroccoli.Infrastructure.Mappers.csproj" />
     <ProjectReference Include="..\JubilantBroccoli\JubilantBroccoli.csproj" />
   </ItemGroup>
 

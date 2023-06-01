@@ -5,9 +5,10 @@ namespace JubilantBroccoli.Domain.Models;
 
 public class Order: Auditable
 {
-    public Customer Customer { get; set; }
+    public User User { get; set; }
     public string? DeliveryAddress { get; set; }
     public OrderStatus Status { get; set; }
-    public ICollection<Item> Items { get; set; }
+    public ICollection<OrderedItem> OrderedItems { get; set; }
     public DeliverType DeliverType { get; set; }
+    public Restaurant Restaurant { get; set; }
 }

@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace JubilantBroccoli.UnitTests
 {
     public class AutomapperTests

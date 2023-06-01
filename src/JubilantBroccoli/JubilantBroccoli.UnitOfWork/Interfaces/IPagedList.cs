@@ -1,4 +1,4 @@
-﻿namespace JubilantBroccoli.Infrastructure.Core.Interfaces;
+﻿namespace JubilantBroccoli.UnitOfWork.Interfaces;
 
 /// <summary>
 /// Provides the interface(s) for paged list of any type.
