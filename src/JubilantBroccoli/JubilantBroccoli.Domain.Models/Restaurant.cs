@@ -1,11 +1,11 @@
-﻿using JubilantBroccoli.Domain.Core.Enums;
-using JubilantBroccoli.Domain.Core.Interfaces;
+﻿using JubilantBroccoli.Domain.Core.Contracts;
+using JubilantBroccoli.Domain.Core.Enums;
 
 namespace JubilantBroccoli.Domain.Models
 {
     public class Restaurant: IHaveId
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public ICollection<Item> Items { get; set; }

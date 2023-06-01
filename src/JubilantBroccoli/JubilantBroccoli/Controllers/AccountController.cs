@@ -1,12 +1,8 @@
-﻿using System.ComponentModel;
-using JubilantBroccoli.Domain.Core.Implementations;
+﻿using AutoMapper;
+using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.Domain.Dtos.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Security.Claims;
-using JubilantBroccoli.Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace JubilantBroccoli.Controllers
 {
@@ -14,71 +10,66 @@ namespace JubilantBroccoli.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        // тестовые данные вместо использования базы данных
-        private List<Person> people = new List<Person>
-        {
-            new Person {Login="admin@gmail.com", Password="12345", Role = "admin" },
-            new Person { Login="qwerty@gmail.com", Password="55555", Role = "user" }
-        };
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IMapper _mapper;
+        private readonly IJwtGenerator _jwtGenerator;
 
-        [HttpPost("/token")]
-        public IActionResult Token(string username, string password)
+        public AccountController(
+            UserManager<IdentityUser> userManager,
+            IJwtGenerator jwtGenerator,
+            IMapper mapper)
         {
-            var identity = GetIdentity(username, password);
-            if (identity == null)
+            _userManager = userManager;
+            _jwtGenerator = jwtGenerator;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserDto>> PostUser(AuthenticationRequest user)
+        {
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                return BadRequest(ModelState);
+            }
+            var result = await _userManager.CreateAsync(
+                new IdentityUser() { UserName = user.UserName, Email = user.Email },
+                user.Password
+            );
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            
+            return Created("", _mapper.Map<UserDto>(user));
+        }
+
+        [HttpPost("BearerToken")]
+        public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(AuthenticationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Bad credentials");
             }
 
-            var now = DateTime.UtcNow;
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var user = await _userManager.FindByNameAsync(request.UserName);
 
-            var response = new
+            if (user == null)
             {
-                access_token = encodedJwt,
-                username = identity.Name
-            };
-
-            return Json(response);
-        }
-
-        [Authorize]
-        [HttpGet("login")]
-        public int Login()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpGet("role")]
-        public int Role()
-        {
-            throw new NotImplementedException();
-        }
-
-        private ClaimsIdentity GetIdentity(string username, string password)
-        {
-            Person person = people.FirstOrDefault(x => x.Login == username && x.Password == password);
-            if (person != null)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role)
-                };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                return BadRequest("Bad credentials");
             }
-            return null;
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+
+            if (!isPasswordValid)
+            {
+                return BadRequest("Bad credentials");
+            }
+
+            var token = _jwtGenerator.CreateToken(user);
+
+            return Ok(token);
         }
+
     }
 }

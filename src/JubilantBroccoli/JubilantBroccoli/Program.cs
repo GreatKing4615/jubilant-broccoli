@@ -1,12 +1,15 @@
-using JubilantBroccoli;
-using JubilantBroccoli.Domain.Core.Implementations;
+using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.BusinessLogic.Implementations;
 using JubilantBroccoli.Infrastructure.Core.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
+using System.Text;
 
 // Add services to the container.
 Log.Logger = new LoggerConfiguration()
@@ -20,34 +23,60 @@ try
 {
     Log.Information("Starting web host");
     var builder = WebApplication.CreateBuilder(args);
-
-    // Add services to the container.
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseNpgsql(connectionString));
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    var configuration = builder.Configuration;
+    var services = builder.Services;
     
-    MapperRegistration.GetMapperConfiguration();
-    builder.Services.AddControllersWithViews();
+    // Add services to the container.
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
+    services.AddDatabaseDeveloperPageExceptionFilter();
+
+    services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
+    services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console()
     );
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    services.AddIdentityCore<IdentityUser>(options => {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        })
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+    services.AddScoped<IJwtGenerator, JwtGenerator>();
+    services
+        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = new TokenValidationParameters
+            options.TokenValidationParameters = new TokenValidationParameters()
             {
                 ValidateIssuer = true,
-                ValidIssuer = AuthOptions.ISSUER,
                 ValidateAudience = true,
-                ValidAudience = AuthOptions.AUDIENCE,
                 ValidateLifetime = true,
-                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                 ValidateIssuerSigningKey = true,
+                ValidAudience = configuration["Jwt:Audience"],
+                ValidIssuer = configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(configuration["Jwt:Key"])
+                )
             };
         });
+
     var app = builder.Build();
+    app.UseExceptionHandler(a => a.Run(async context =>
+    {
+        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        var exception = exceptionHandlerPathFeature.Error;
+        await context.Response.WriteAsJsonAsync(new { error = exception.Message });
+    }));
 
     if (app.Environment.IsDevelopment())
     {
@@ -59,23 +88,20 @@ try
         app.UseHsts();
     }
 
-    using (var scope = app.Services.CreateScope())
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    await DataInitializer.InitializeAsync(scope.ServiceProvider);
+    //}
+
+    if (app.Environment.IsDevelopment())
     {
-        await DataInitializer.InitializeAsync(scope.ServiceProvider);
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "myappname v1"));
     }
-
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
-
-    app.UseRouting();
-
+    app.MapControllers();
     app.UseAuthentication();
     app.UseAuthorization();
-
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
     app.Run();
 }
 catch (Exception ex)
@@ -87,40 +113,3 @@ finally
     Log.CloseAndFlush();
 }
 
-
-//builder.Services.AddControllers();
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.RequireHttpsMetadata = false;
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidIssuer = AuthOptions.ISSUER,
-//            ValidateAudience = true,
-//            ValidAudience = AuthOptions.AUDIENCE,
-//            ValidateLifetime = true,
-//            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-//            ValidateIssuerSigningKey = true,
-//        };
-//    });
-
-//var app = builder.Build();
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();

@@ -5,6 +5,11 @@ services:
     build:
       context: .
       dockerfile: JubilantBroccoli/Dockerfile
+    depends_on:
+        - broccoli.db
+    ports:
+      - "5001:443"
+      - "8080:80"
 
   broccoli.db:
     image: postgres:13.3

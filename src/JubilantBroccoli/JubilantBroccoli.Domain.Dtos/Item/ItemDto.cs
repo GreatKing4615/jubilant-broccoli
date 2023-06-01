@@ -4,7 +4,7 @@ namespace JubilantBroccoli.Domain.Dtos.Item;
 
 public class ItemDto
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public double Price { get; set; }
     public double Weight { get; set; }

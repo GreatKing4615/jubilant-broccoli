@@ -1,6 +1,0 @@
-﻿namespace JubilantBroccoli.Domain.Core.Interfaces;
-
-public interface IHaveId
-{
-    public long Id { get; set; }
-}

@@ -3,5 +3,5 @@
 public class ItemOptionDto
 {
     public string Name { get; set; }
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 }

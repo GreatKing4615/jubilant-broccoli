@@ -2,7 +2,7 @@
 using JubilantBroccoli.Infrastructure.Core;
 using JubilantBroccoli.Infrastructure.Core.Interfaces;
 
-namespace JubilantBroccoli.Infrastructure.Mappers.Base;
+namespace JubilantBroccoli.MapperProfiles;
 
 public class PagedListConverter<TSource, TDestination> : ITypeConverter<IPagedList<TSource>, IPagedList<TDestination>>
 {

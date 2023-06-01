@@ -10,13 +10,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
         builder.Property(x => x.Id);
+        builder.Property(x => x.Email);
+        builder.Property(x => x.UserName);
         builder.Property(x => x.Address).HasMaxLength(3000).IsRequired(false);
         builder.Ignore(x => x.Orders);
-        builder.Property(x => x.Login).IsRequired();
         builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Role).IsRequired().HasDefaultValue(AppData.UserRoleName);
-
-        builder.HasIndex(x => x.Login);
-
     }
 }

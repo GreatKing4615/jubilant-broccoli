@@ -1,12 +1,17 @@
 ﻿using System.Reflection;
-using JubilantBroccoli.Domain.Core.Interfaces;
+using JubilantBroccoli.Domain.Core.Contracts;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JubilantBroccoli.Infrastructure.Core.Base
 {
-    public class ApplicationDbContext : DbContextBase
+    public class ApplicationDbContext : IdentityUserContext<IdentityUser>
     {
         public SaveChangesResult SaveChangesResult { get; set; }
+
+        protected const string DefaultUser = "System";
+        protected readonly DateTime _defaultDatetime = DateTime.UtcNow;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -37,7 +42,6 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
                     entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue = _defaultDatetime;
 
             }
-
             var modifiedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
         }
     }

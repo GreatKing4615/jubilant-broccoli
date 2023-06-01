@@ -1,42 +1,3 @@
-//{
-//  "$schema": "https://json.schemastore.org/launchsettings.json",
-//  "iisSettings": {
-//    "windowsAuthentication": false,
-//    "anonymousAuthentication": true,
-//    "iisExpress": {
-//      "applicationUrl": "http://localhost:34589",
-//      "sslPort": 44351
-//    }
-//  },
-//  "profiles": {
-//    "JubilantBroccoli": {
-//      "commandName": "Project",
-//      "launchBrowser": true,
-//      "launchUrl": "swagger",
-//      "environmentVariables": {
-//        "ASPNETCORE_ENVIRONMENT": "Development"
-//      },
-//      "applicationUrl": "https://localhost:7156;http://localhost:5156",
-//      "dotnetRunMessages": true
-//    },
-//    "IIS Express": {
-//      "commandName": "IISExpress",
-//      "launchBrowser": true,
-//      "launchUrl": "swagger",
-//      "environmentVariables": {
-//        "ASPNETCORE_ENVIRONMENT": "Development"
-//      }
-//    },
-//    "Docker": {
-//      "commandName": "Docker",
-//      "launchBrowser": true,
-//      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-//      "publishAllPorts": true,
-//      "useSSL": true
-//    }
-//  }
-//}
-
 {
   "profiles": {
     "Kestrel": {
@@ -51,9 +12,10 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "publishAllPorts": true,
-      "useSSL": true
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "useSSL": true,
+      "sslPort": 44360,
+      "httpPort": 51803
     }
   }
 }

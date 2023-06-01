@@ -1,6 +1,6 @@
-﻿using JubilantBroccoli.Domain.Core.Enums;
+﻿using JubilantBroccoli.Domain.Core.Contracts;
+using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Core.Implementations;
-using JubilantBroccoli.Domain.Core.Interfaces;
 
 namespace JubilantBroccoli.Domain.Models;
 
@@ -9,7 +9,7 @@ namespace JubilantBroccoli.Domain.Models;
 /// </summary>
 public class Item:IHaveId
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public double Price { get; set; }
     public TimeSpan CookingTime { get; set; }

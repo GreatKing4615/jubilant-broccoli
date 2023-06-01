@@ -14,17 +14,17 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
             await using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.MigrateAsync();
             var roles = AppData.Roles.ToArray();
-            var roleStore = new RoleStore<IdentityRole>(context);
-            foreach (var role in roles)
-            {
-                if (!context.Roles.Any(x => x.Name == role))
-                {
-                    await roleStore.CreateAsync(new IdentityRole(role)
-                    {
-                        NormalizedName = role.ToUpper()
-                    });
-                }
-            }
+            //var roleStore = new RoleStore<IdentityRole>(context);
+            //foreach (var role in roles)
+            //{
+            //    if (!roleStore.Roles.Any(x => x.Name == role))
+            //    {
+            //        await roleStore.CreateAsync(new IdentityRole(role)
+            //        {
+            //            NormalizedName = role.ToUpper()
+            //        });
+            //    }
+            //}
 
             const string username = "shahoval99@mail.ru";
 

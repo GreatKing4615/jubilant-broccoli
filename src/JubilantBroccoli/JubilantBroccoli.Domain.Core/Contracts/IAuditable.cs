@@ -1,4 +1,4 @@
-﻿namespace JubilantBroccoli.Domain.Core.Interfaces;
+﻿namespace JubilantBroccoli.Domain.Core.Contracts;
 
 public interface IAuditable
 {
