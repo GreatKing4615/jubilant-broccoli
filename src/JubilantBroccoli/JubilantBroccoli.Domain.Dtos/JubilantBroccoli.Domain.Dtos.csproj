@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Order\" />
+    <Folder Include="Restaurant\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JubilantBroccoli.Domain.Core\JubilantBroccoli.Domain.Core.csproj" />
+  </ItemGroup>
+
+</Project>

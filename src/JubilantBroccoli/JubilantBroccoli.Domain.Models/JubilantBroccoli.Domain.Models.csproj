@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JubilantBroccoli.Entities.Base\JubilantBroccoli.Domain.Core.csproj" />
+    <ProjectReference Include="..\JubilantBroccoli.Domain.Core\JubilantBroccoli.Domain.Core.csproj" />
   </ItemGroup>
 
 </Project>

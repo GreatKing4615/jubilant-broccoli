@@ -1,4 +1,4 @@
-﻿namespace JubilantBroccoli.UnitOfWork;
+﻿namespace JubilantBroccoli.Infrastructure.UnitOfWork;
 
 /// <summary>
 /// Represent operation result for SaveChanges.

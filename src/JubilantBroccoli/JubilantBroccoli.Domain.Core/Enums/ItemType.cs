@@ -1,9 +1,10 @@
 ﻿namespace JubilantBroccoli.Domain.Core.Enums;
 
-public enum DishType
+public enum ItemType
 {
     Burger,
     Pizza,
     Sushi,
-    Wok
+    Wok,
+    Beverage
 }
