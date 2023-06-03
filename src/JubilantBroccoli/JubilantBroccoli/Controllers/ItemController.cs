@@ -12,27 +12,28 @@ namespace JubilantBroccoli.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RestaurantController : Controller
+public class ItemController : Controller
 {
-    private readonly IRepository<Restaurant> _restaurantRepository;
+    private readonly IRepository<Item> _restaurantRepository;
     private readonly IMapper _mapper;
 
 
-    public RestaurantController(IMapper mapper, IUnitOfWork unitOfWork)
+    public ItemController(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
-        _restaurantRepository = unitOfWork.GetRepository<Restaurant>();
+        _restaurantRepository = unitOfWork.GetRepository<Item>();
     }
 
 
     [HttpGet]
-    public async Task<ActionResult<IPagedList<RestaurantDto>>> GetRestaurants(int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<IPagedList<ItemDto>>> GetItems(string restaurantId)
     {
         var restaurantsPagedList = await _restaurantRepository.GetPagedListAsync(
-            selector: x => x
+            selector: x => x,
+            predicate:x=>x.Restaurants.Any(r=>r.Id == restaurantId)
             );
 
-        var response = _mapper.Map<IPagedList<RestaurantDto>>(restaurantsPagedList);
+        var response = _mapper.Map<IPagedList<ItemDto>>(restaurantsPagedList);
 
         return Ok(response);
     }

@@ -18,7 +18,6 @@ namespace JubilantBroccoli.MapperProfiles
                 .ForMember(x => x.UserName, x => x.MapFrom(opt => opt.UserName))
                 .ForAllMembers(x => x.Ignore());
 
-
             CreateMap<IPagedList<User>, IPagedList<UserDto>>()
                 .ConvertUsing<PagedListConverter<User, UserDto>>();
         }

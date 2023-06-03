@@ -11,12 +11,12 @@ namespace JubilantBroccoli.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IJwtGenerator _jwtGenerator;
 
         public AccountController(
-            UserManager<IdentityUser> userManager,
+            UserManager<User> userManager,
             IJwtGenerator jwtGenerator,
             IMapper mapper)
         {

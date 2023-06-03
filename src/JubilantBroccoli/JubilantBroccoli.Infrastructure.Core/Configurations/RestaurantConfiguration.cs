@@ -14,7 +14,7 @@ public class RestaurantConfiguration : IEntityTypeConfiguration<Restaurant>
         builder.Property(x => x.Address).HasMaxLength(500).IsRequired();
         builder.Property(x => x.Closing).HasMaxLength(300).IsRequired();
         builder.Property(x => x.Opening).HasMaxLength(300).IsRequired();
-        builder.Ignore(x => x.ItemTypes);
+        builder.Property(x => x.ItemTypes).HasMaxLength(300);
 
         builder.HasMany(x => x.Orders).WithOne(x => x.Restaurant);
         builder.HasMany(x => x.Items).WithMany(x => x.Restaurants);

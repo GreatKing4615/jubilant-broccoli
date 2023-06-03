@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JubilantBroccoli.Domain.Dtos\JubilantBroccoli.Domain.Dtos.csproj" />
     <ProjectReference Include="..\JubilantBroccoli.Domain.Models\JubilantBroccoli.Domain.Models.csproj" />
+    <ProjectReference Include="..\JubilantBroccoli.Infrastructure.UnitOfWork\JubilantBroccoli.Infrastructure.UnitOfWork.csproj" />
   </ItemGroup>
 
 </Project>
