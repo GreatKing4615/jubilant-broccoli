@@ -17,7 +17,7 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
         builder.Property(x => x.Weight).IsRequired();
         builder.Property(x => x.Unit).IsRequired().HasMaxLength(50);
 
-        builder.HasMany(x => x.ItemOptions).WithMany(x=>x.Items);
+        builder.HasMany(x => x.ItemOptions).WithMany(x => x.Items);
 
         builder.HasIndex(x => x.Name);
         builder.HasIndex(x => x.Price);

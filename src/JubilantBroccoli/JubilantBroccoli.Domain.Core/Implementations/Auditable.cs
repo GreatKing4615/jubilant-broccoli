@@ -6,5 +6,5 @@ public class Auditable : IAuditable, IHaveId
 {
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 }

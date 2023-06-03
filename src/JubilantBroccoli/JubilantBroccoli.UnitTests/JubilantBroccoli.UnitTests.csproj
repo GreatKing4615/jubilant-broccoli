@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\JubilantBroccoli\JubilantBroccoli.csproj" />
-  </ItemGroup>
-
 </Project>

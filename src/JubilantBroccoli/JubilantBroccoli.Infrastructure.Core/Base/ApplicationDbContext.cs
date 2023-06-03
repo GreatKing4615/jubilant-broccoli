@@ -1,17 +1,25 @@
-﻿using System.Reflection;
-using JubilantBroccoli.Domain.Core.Contracts;
+﻿using JubilantBroccoli.Domain.Core.Contracts;
+using JubilantBroccoli.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace JubilantBroccoli.Infrastructure.Core.Base
 {
-    public class ApplicationDbContext : IdentityUserContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public SaveChangesResult SaveChangesResult { get; set; }
 
         protected const string DefaultUser = "System";
         protected readonly DateTime _defaultDatetime = DateTime.UtcNow;
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemOption> ItemOptions { get; set; }
+        public DbSet<OrderedItem> OrderedItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -35,7 +43,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
 
                 var createdAt = entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue;
                 var updatedAt = entity.Property(nameof(IAuditable.UpdatedAt)).CurrentValue;
-                
+
                 if (!DateTime.TryParse(createdAt.ToString(), out var parsedCreatedAt))
                     entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue = _defaultDatetime;
                 if (updatedAt != null && !DateTime.TryParse(updatedAt.ToString(), out var parsedUpdatedAt))

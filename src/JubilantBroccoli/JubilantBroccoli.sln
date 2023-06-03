@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JubilantBroccoli.BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JubilantBroccoli.BusinessLogic.Implementations", "JubilantBroccoli.BusinessLogic.Implementations\JubilantBroccoli.BusinessLogic.Implementations.csproj", "{3EDD5E29-9E43-4802-9A0B-84D1B2841D64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JubilantBroccoli.Infrastructure.UnitOfWork", "JubilantBroccoli.Infrastructure.UnitOfWork\JubilantBroccoli.Infrastructure.UnitOfWork.csproj", "{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{3EDD5E29-9E43-4802-9A0B-84D1B2841D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EDD5E29-9E43-4802-9A0B-84D1B2841D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EDD5E29-9E43-4802-9A0B-84D1B2841D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{245AB342-CEC6-4DE6-92CF-427EC14B7FFD} = {3EF5F606-A428-4D0A-AD88-0F8628599E0D}
 		{CD57D1D3-7662-4C3C-BB8A-21E2EBEC894A} = {8DBE3762-DA4C-4112-8FD2-1777EB6A505E}
 		{3EDD5E29-9E43-4802-9A0B-84D1B2841D64} = {8DBE3762-DA4C-4112-8FD2-1777EB6A505E}
+		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F} = {3EF5F606-A428-4D0A-AD88-0F8628599E0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B11C631-4230-4399-945C-EAA959423FA3}

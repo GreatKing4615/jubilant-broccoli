@@ -1,6 +1,7 @@
 ﻿using JubilantBroccoli.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JubilantBroccoli.Infrastructure.Core.Configurations;
 
@@ -14,7 +15,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.UserName);
         builder.Property(x => x.Address).HasMaxLength(3000).IsRequired(false);
         builder.Ignore(x => x.Orders);
-        builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Role).IsRequired().HasDefaultValue(AppData.UserRoleName);
     }
 }

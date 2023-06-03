@@ -2,7 +2,7 @@
 
 namespace JubilantBroccoli.Domain.Models;
 
-public class OrderedItem: Auditable
+public class OrderedItem : Auditable
 {
     public Order Order { get; set; }
     public Item Item { get; set; }

@@ -1,6 +1,7 @@
 using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
 using JubilantBroccoli.Infrastructure.Core.Base;
+using JubilantBroccoli.Infrastructure.UnitOfWork.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -25,13 +26,14 @@ try
     var builder = WebApplication.CreateBuilder(args);
     var configuration = builder.Configuration;
     var services = builder.Services;
-    
+
     // Add services to the container.
     var connectionString = configuration.GetConnectionString("DefaultConnection");
     services.AddDatabaseDeveloperPageExceptionFilter();
 
     services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
+    services.AddUnitOfWork<ApplicationDbContext>();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -41,15 +43,17 @@ try
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console()
     );
-    services.AddIdentityCore<IdentityUser>(options => {
-            options.SignIn.RequireConfirmedAccount = false;
-            options.User.RequireUniqueEmail = true;
-            options.Password.RequireDigit = false;
-            options.Password.RequiredLength = 6;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireLowercase = false;
-        })
+    services.AddIdentityCore<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
     services.AddScoped<IJwtGenerator, JwtGenerator>();
     services
@@ -88,10 +92,10 @@ try
         app.UseHsts();
     }
 
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    await DataInitializer.InitializeAsync(scope.ServiceProvider);
-    //}
+    using (var scope = app.Services.CreateScope())
+    {
+        await DataInitializer.InitializeAsync(scope.ServiceProvider);
+    }
 
     if (app.Environment.IsDevelopment())
     {

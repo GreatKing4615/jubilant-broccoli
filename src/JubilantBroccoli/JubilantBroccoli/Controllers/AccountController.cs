@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.Domain.Dtos.User;
+using JubilantBroccoli.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +33,7 @@ namespace JubilantBroccoli.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userManager.CreateAsync(
-                new IdentityUser() { UserName = user.UserName, Email = user.Email },
+                new User() { UserName = user.UserName, Email = user.Email, Address = user.Address },
                 user.Password
             );
 
@@ -40,7 +41,7 @@ namespace JubilantBroccoli.Controllers
             {
                 return BadRequest(result.Errors);
             }
-            
+
             return Created("", _mapper.Map<UserDto>(user));
         }
 

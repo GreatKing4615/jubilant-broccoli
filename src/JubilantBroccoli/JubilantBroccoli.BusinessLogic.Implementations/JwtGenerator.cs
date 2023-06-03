@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 namespace JubilantBroccoli.BusinessLogic.Implementations;
 
-public class JwtGenerator: IJwtGenerator
+public class JwtGenerator : IJwtGenerator
 {
     private const int EXPIRATION_MINUTES = 10;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using JubilantBroccoli.Infrastructure.Core;
-using JubilantBroccoli.Infrastructure.Core.Interfaces;
+using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
+using JubilantBroccoli.Infrastructure.UnitOfWork.Implements;
 
 namespace JubilantBroccoli.MapperProfiles;
 

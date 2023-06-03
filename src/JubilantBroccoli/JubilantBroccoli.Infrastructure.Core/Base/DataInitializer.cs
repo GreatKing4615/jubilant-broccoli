@@ -10,43 +10,55 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
     {
         public static async Task InitializeAsync(IServiceProvider serviceProvider)
         {
+
             var scope = serviceProvider.CreateScope();
             await using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.MigrateAsync();
+            await RegisteredUsers(context, scope);
+
+
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task RegisteredUsers(ApplicationDbContext context, IServiceScope scope)
+        {
+            const string email = "123123123@mail.ru";
+            const string password = "123123123";
+            const string phone = "+790000000000";
+            const string UserName = "PikaPi";
+            
+            var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            if (userManager == null || roleManager == null)
+            {
+                throw new ArgumentNullException("UserManager or RoleManager not registered");
+            }
             var roles = AppData.Roles.ToArray();
-            //var roleStore = new RoleStore<IdentityRole>(context);
-            //foreach (var role in roles)
-            //{
-            //    if (!roleStore.Roles.Any(x => x.Name == role))
-            //    {
-            //        await roleStore.CreateAsync(new IdentityRole(role)
-            //        {
-            //            NormalizedName = role.ToUpper()
-            //        });
-            //    }
-            //}
 
-            const string username = "shahoval99@mail.ru";
+            foreach (var role in roles)
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
 
-            if (context.Users.Any(x => x.Email == username))
+            if (await userManager.FindByEmailAsync(email) is not null)
             {
                 return;
             }
 
             var user = new IdentityUser
             {
-                Email = username,
+                Email = email,
                 EmailConfirmed = true,
-                NormalizedEmail = username.ToUpper(),
-                PhoneNumber = "+790000000000",
-                UserName = username,
+                NormalizedEmail = email.ToUpper(),
+                PhoneNumber = phone,
+                UserName = UserName,
                 PhoneNumberConfirmed = true,
-                NormalizedUserName = username.ToUpper(),
+                NormalizedUserName = UserName.ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
             var passwordHasher = new PasswordHasher<IdentityUser>();
-            user.PasswordHash = passwordHasher.HashPassword(user, "123qwe!@#");
+            user.PasswordHash = passwordHasher.HashPassword(user, password);
 
             var userStore = new UserStore<IdentityUser>(context);
             var identityResult = await userStore.CreateAsync(user);
@@ -56,7 +68,6 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
                 throw new Exception(message);
             }
 
-            var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
             foreach (var role in roles)
             {
                 var identityResultRole = await userManager!.AddToRoleAsync(user, role);
@@ -67,8 +78,6 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
                 }
 
             }
-
-            await context.SaveChangesAsync();
         }
     }
 }

@@ -4,7 +4,7 @@ using JubilantBroccoli.Domain.Models;
 
 namespace JubilantBroccoli.MapperProfiles;
 
-public class ItemMapperConfiguration: Profile
+public class ItemMapperConfiguration : Profile
 {
     public ItemMapperConfiguration()
     {

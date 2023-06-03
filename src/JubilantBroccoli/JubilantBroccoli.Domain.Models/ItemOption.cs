@@ -2,9 +2,9 @@
 
 namespace JubilantBroccoli.Domain.Models;
 
-public class ItemOption: IHaveId
+public class ItemOption : IHaveId
 {
     public string Name { get; set; }
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public ICollection<Item> Items { get; set; }
 }

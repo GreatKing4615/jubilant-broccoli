@@ -1,15 +1,14 @@
 ﻿using JubilantBroccoli.Domain.Core.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
-using JubilantBroccoli.Domain.Core.Implementations;
 
 namespace JubilantBroccoli.Domain.Models;
 
 /// <summary>
 /// 
 /// </summary>
-public class Item:IHaveId
+public class Item : IHaveId
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public double Price { get; set; }
     public TimeSpan CookingTime { get; set; }
