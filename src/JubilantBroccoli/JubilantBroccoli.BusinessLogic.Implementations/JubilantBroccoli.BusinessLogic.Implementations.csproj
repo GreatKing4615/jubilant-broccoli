@@ -17,4 +17,8 @@
     <ProjectReference Include="..\JubilantBroccoli.Domain.Dtos\JubilantBroccoli.Domain.Dtos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Base\" />
+  </ItemGroup>
+
 </Project>
