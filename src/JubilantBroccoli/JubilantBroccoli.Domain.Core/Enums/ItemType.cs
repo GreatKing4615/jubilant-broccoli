@@ -6,5 +6,6 @@ public enum ItemType
     Pizza,
     Sushi,
     Wok,
-    Beverage
+    Beverage,
+    Kebab
 }

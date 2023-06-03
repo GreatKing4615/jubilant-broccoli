@@ -2,6 +2,7 @@ using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
 using JubilantBroccoli.Infrastructure.Core.Base;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Extensions;
+using JubilantBroccoli.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -92,11 +93,6 @@ try
         app.UseHsts();
     }
 
-    using (var scope = app.Services.CreateScope())
-    {
-        await DataInitializer.InitializeAsync(scope.ServiceProvider);
-    }
-
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -106,6 +102,12 @@ try
     app.MapControllers();
     app.UseAuthentication();
     app.UseAuthorization();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        await DataInitializer.InitializeAsync(scope.ServiceProvider);
+    }
+
     app.Run();
 }
 catch (Exception ex)

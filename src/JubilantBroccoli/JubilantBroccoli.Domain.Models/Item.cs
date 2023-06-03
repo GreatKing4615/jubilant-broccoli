@@ -3,9 +3,6 @@ using JubilantBroccoli.Domain.Core.Enums;
 
 namespace JubilantBroccoli.Domain.Models;
 
-/// <summary>
-/// 
-/// </summary>
 public class Item : IHaveId
 {
     public string Id { get; set; }

@@ -9,7 +9,7 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
     public void Configure(EntityTypeBuilder<Item> builder)
     {
         builder.ToTable("Items");
-        builder.Property(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.CookingTime).IsRequired();
         builder.Property(x => x.Type).IsRequired();
         builder.Property(x => x.Name).HasMaxLength(3000).IsRequired();

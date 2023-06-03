@@ -9,7 +9,7 @@ public class RestaurantConfiguration : IEntityTypeConfiguration<Restaurant>
     public void Configure(EntityTypeBuilder<Restaurant> builder)
     {
         builder.ToTable("Restaurants");
-        builder.Property(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.Name).HasMaxLength(500).IsRequired();
         builder.Property(x => x.Address).HasMaxLength(500).IsRequired();
         builder.Property(x => x.Closing).HasMaxLength(300).IsRequired();

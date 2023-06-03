@@ -123,7 +123,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeliverType")
+                    b.Property<int>("DeliveryType")
                         .HasMaxLength(300)
                         .HasColumnType("integer");
 

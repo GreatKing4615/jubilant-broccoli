@@ -1,6 +1,6 @@
 ﻿namespace JubilantBroccoli.Domain.Core.Enums;
 
-public enum DeliverType
+public enum DeliveryType
 {
     PickUp,
     Courier
