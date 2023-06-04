@@ -12,8 +12,9 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text;
+using JubilantBroccoli.BusinessLogic.Implementations.Base;
+using JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-// Add services to the container.
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -76,6 +77,12 @@ try
         });
 
     services.AddTransient<IOrderService, OrderService>();
+    services.AddTransient<IOrderProcessor, BurgerPreparation>();
+    services.AddTransient<IOrderProcessor, PizzaPreparation>();
+    services.AddTransient<IOrderProcessor, SushiPreparation>();
+    services.AddTransient<IOrderProcessor, WokPreparation>();
+    services.AddTransient<IOrderProcessor, BeveragePreparation>();
+    services.AddTransient<IOrderProcessor, KebabPreparation>();
 
     var app = builder.Build();
     app.UseExceptionHandler(a => a.Run(async context =>

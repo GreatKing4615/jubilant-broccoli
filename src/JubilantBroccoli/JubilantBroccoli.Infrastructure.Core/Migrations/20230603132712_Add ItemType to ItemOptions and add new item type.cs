@@ -23,6 +23,13 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "DeliveryType",
+                table: "Orders",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
         }
 
         /// <inheritdoc />
@@ -35,6 +42,10 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
             migrationBuilder.DropColumn(
                 name: "Type",
                 table: "ItemOptions");
+
+            migrationBuilder.DropColumn(
+                name: "DeliveryType",
+                table: "Orders");
         }
     }
 }

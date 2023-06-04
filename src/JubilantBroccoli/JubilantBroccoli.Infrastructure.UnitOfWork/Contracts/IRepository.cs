@@ -18,7 +18,15 @@ public interface IRepository<TEntity> where TEntity : class
         bool ignoreQueryFilters = false,
         bool ignoreAutoIncludes = false) where TResult : class;
 
-    IQueryable<TEntity> GetAll(bool disableTracking = true);
+    // public IQueryable<TEntity> GetAll(bool disableTracking = true);
+
+    IQueryable<TResult?> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false,
+        bool ignoreAutoIncludes = false) where TResult : class;
 
     public Task<TResult?> SingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,

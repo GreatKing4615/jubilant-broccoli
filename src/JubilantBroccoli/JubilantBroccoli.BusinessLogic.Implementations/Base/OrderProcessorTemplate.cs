@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Base;
 
-public abstract class ItemPreparationTemplate : IOrderProcessor
+public abstract class OrderProcessorTemplate : IOrderProcessor
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<ItemPreparationTemplate> _logger;
+    private readonly ILogger<OrderProcessorTemplate> _logger;
     private readonly IRepository<Order> _orderRepository;
     protected readonly IRepository<OrderedItem> _orderedItemRepository;
 
-    protected ItemPreparationTemplate(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork)
+    protected OrderProcessorTemplate(ILogger<OrderProcessorTemplate> logger, IUnitOfWork unitOfWork)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -75,6 +75,7 @@ public abstract class ItemPreparationTemplate : IOrderProcessor
         {
             var timeToDelivery = Randomiser.GetRandomSpan(200000, 500000);
             order.Status = OrderStatus.Delivering;
+            order.DeliveryTime = timeToDelivery;
             _orderRepository.Update(order);
             _logger.LogInformation($"Order № {order.Id}; vroom vroom! Courier will delivery order in average");
             await Task.Delay(timeToDelivery);

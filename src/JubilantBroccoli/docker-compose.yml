@@ -9,7 +9,16 @@ services:
         - broccoli.db
     ports:
       - "5001:443"
-      - "8080:80"
+      - "8080:80"  
+
+  jubilantbroccoli.backgroudservice:
+    image: ${DOCKER_REGISTRY-}jubilantbroccolibackgroundservice
+    build:
+      context: .
+      dockerfile: JubilantBroccoli.BackgroundService/Dockerfile
+    depends_on:
+        - broccoli.db
+        - jubilantbroccoli
 
   broccoli.db:
     image: postgres:13.3

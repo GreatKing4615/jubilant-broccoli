@@ -22,6 +22,7 @@ public class RestaurantController : Controller
 
 
     [HttpGet]
+    [Route("/restaurants")]
     public async Task<ActionResult<IPagedList<RestaurantDto>>> GetRestaurants(int pageNumber = 1, int pageSize = 10)
     {
         var restaurantsPagedList = await _restaurantRepository.GetPagedListAsync(

@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-public class KebabPreparation : ItemPreparationTemplate, IRecipe
+public class KebabPreparation : OrderProcessorTemplate, IRecipe
 {
     private readonly ILogger _logger;
     private readonly string[] _candidatesToMeat = { "Cow", "Pig", "Rabbit", "Sheep", "Cat", "Dog", "chicken", "turkey" };
 
-    public KebabPreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+    public KebabPreparation(ILogger<OrderProcessorTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
     {
         _logger = logger;
     }

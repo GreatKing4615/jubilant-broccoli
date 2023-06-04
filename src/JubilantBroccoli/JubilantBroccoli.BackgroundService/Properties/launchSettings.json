@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "JubilantBroccoli.BackgroundService": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

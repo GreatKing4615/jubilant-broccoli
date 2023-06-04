@@ -11,7 +11,6 @@ public class JwtGeneratorTests
 
     public JwtGeneratorTests()
     {
-        // Setup configuration mock
         _configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
@@ -43,8 +42,5 @@ public class JwtGeneratorTests
         Assert.NotNull(authenticationResponse);
         Assert.NotNull(authenticationResponse.Token);
         Assert.True(authenticationResponse.Expiration > DateTime.UtcNow);
-
-        // You can perform additional assertions on the generated token if desired
-        // For example, you can use a JWT library to validate the token structure and claims.
     }
 }

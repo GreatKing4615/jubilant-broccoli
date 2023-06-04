@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-public class WokPreparation : ItemPreparationTemplate, IRecipe
+public class WokPreparation : OrderProcessorTemplate, IRecipe
 {
     private readonly ILogger _logger;
 
-    public WokPreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+    public WokPreparation(ILogger<OrderProcessorTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
     {
         _logger = logger;
     }

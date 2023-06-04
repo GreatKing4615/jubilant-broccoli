@@ -9,17 +9,17 @@ using Xunit;
 
 namespace JubilantBroccoli.UnitTests.Services
 {
-    public class ItemPreparationTemplateTests
+    public class OrderProcessorTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<ILogger<ItemPreparationTemplate>> _loggerMock;
+        private readonly Mock<ILogger<OrderProcessorTemplate>> _loggerMock;
         private readonly Mock<IRepository<Order>> _orderRepositoryMock;
         private readonly Mock<IRepository<OrderedItem>> _orderedItemRepositoryMock;
 
-        public ItemPreparationTemplateTests()
+        public OrderProcessorTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _loggerMock = new Mock<ILogger<ItemPreparationTemplate>>();
+            _loggerMock = new Mock<ILogger<OrderProcessorTemplate>>();
             _orderRepositoryMock = new Mock<IRepository<Order>>();
             _orderedItemRepositoryMock = new Mock<IRepository<OrderedItem>>();
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Order>()).Returns(_orderRepositoryMock.Object);
@@ -62,7 +62,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 }
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
 
             // Act
@@ -107,7 +107,7 @@ namespace JubilantBroccoli.UnitTests.Services
             }
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);
@@ -142,7 +142,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 ItemOptions = new List<ItemOption>()
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);
@@ -176,7 +176,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 ItemOptions = new List<ItemOption>()
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);
@@ -211,7 +211,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 ItemOptions = new List<ItemOption>()
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);
@@ -246,7 +246,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 ItemOptions = new List<ItemOption>()
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);
@@ -281,7 +281,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 ItemOptions = new List<ItemOption>()
             };
             order.OrderedItems.Add(orderedItem);
-            var template = new Mock<ItemPreparationTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
+            var template = new Mock<OrderProcessorTemplate>(_loggerMock.Object, _unitOfWorkMock.Object) { CallBase = true }.Object;
 
             // Act
             await template.ProcessOrder(order);

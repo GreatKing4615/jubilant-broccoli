@@ -9,9 +9,9 @@ namespace JubilantBroccoli.BusinessLogic.Implementations.Base;
 public class RecipeBook
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<ItemPreparationTemplate> _logger;
+    private readonly ILogger<OrderProcessorTemplate> _logger;
 
-    public RecipeBook(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork)
+    public RecipeBook(ILogger<OrderProcessorTemplate> logger, IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;

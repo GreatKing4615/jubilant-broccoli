@@ -11,12 +11,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("Orders");
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
-        builder.Property(x => x.DeliveryType).HasMaxLength(300).HasDefaultValue(DeliveryType.PickUp).IsRequired();
+        builder.Property(x => x.DeliveryType).HasMaxLength(300).IsRequired();
+        builder.Property(x => x.DeliveryTime).HasMaxLength(300).IsRequired();
         builder.Property(x => x.DeliveryAddress).HasMaxLength(500).IsRequired(false);
         builder.Property(x => x.Status).HasMaxLength(300).IsRequired();
         builder.Property(x => x.CreatedAt).HasMaxLength(300).IsRequired();
         builder.Property(x => x.UpdatedAt).HasMaxLength(300).IsRequired();
-
         builder.HasMany(x => x.OrderedItems).WithOne(x => x.Order);
     }
 }

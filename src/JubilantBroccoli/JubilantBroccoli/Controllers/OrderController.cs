@@ -28,7 +28,8 @@ namespace JubilantBroccoli.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<OrderDto>> GetCart()
+        [Route("/current-cart")]
+        public async Task<ActionResult<OrderDto>> GetCurrentCart()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -44,6 +45,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpPost]
+        [Route("/item")]
         public async Task<ActionResult<OrderDto>> PostCart(OrderItemDto orderedItem)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -66,6 +68,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpDelete]
+        [Route("/item")]
         public async Task<ActionResult<OrderItemDto>> RemoveItem(string itemId)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -85,6 +88,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpPost]
+        [Route("/status")]
         public async Task<ActionResult<OrderDto>> ChangeOrderStatus(string orderId, OrderStatus orderStatus)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -109,6 +113,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpGet]
+        [Route("/user-history")]
         public async Task<ActionResult<OrderDto>> UserHistory()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -125,6 +130,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpPost]
+        [Route("/clear-cart")]
         public async Task<ActionResult<OrderDto>> ClearCart()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

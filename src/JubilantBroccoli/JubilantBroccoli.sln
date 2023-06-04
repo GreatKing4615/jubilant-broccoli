@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JubilantBroccoli.BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JubilantBroccoli.Infrastructure.UnitOfWork", "JubilantBroccoli.Infrastructure.UnitOfWork\JubilantBroccoli.Infrastructure.UnitOfWork.csproj", "{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JubilantBroccoli.BackgroundService", "JubilantBroccoli.BackgroundService\JubilantBroccoli.BackgroundService.csproj", "{134F00B9-4176-4088-B88C-0F1034E42E58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JubilantBroccoli.BackgroundService", "JubilantBroccoli.BackgroundService\JubilantBroccoli.BackgroundService.csproj", "{A7E0A419-D0A2-4F07-9523-0E748BB43B2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +79,10 @@ Global
 		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADAA62F0-1545-4D6F-B63A-7EF96AE9E21F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{134F00B9-4176-4088-B88C-0F1034E42E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{134F00B9-4176-4088-B88C-0F1034E42E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{134F00B9-4176-4088-B88C-0F1034E42E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{134F00B9-4176-4088-B88C-0F1034E42E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E0A419-D0A2-4F07-9523-0E748BB43B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E0A419-D0A2-4F07-9523-0E748BB43B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E0A419-D0A2-4F07-9523-0E748BB43B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E0A419-D0A2-4F07-9523-0E748BB43B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

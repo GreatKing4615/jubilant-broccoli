@@ -22,6 +22,7 @@ public class ItemController : Controller
 
 
     [HttpGet]
+    [Route("/items")]
     public async Task<ActionResult<IPagedList<ItemDto>>> GetItems(string restaurantId)
     {
         var restaurantsPagedList = await _restaurantRepository.GetPagedListAsync(
