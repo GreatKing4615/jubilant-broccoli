@@ -27,4 +27,8 @@
     <ProjectReference Include="..\JubilantBroccoli.Domain.Models\JubilantBroccoli.Domain.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CustomExceptions\" />
+  </ItemGroup>
+
 </Project>

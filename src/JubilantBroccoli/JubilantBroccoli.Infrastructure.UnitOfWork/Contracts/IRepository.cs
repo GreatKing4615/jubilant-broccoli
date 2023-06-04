@@ -20,12 +20,22 @@ public interface IRepository<TEntity> where TEntity : class
 
     IQueryable<TEntity> GetAll(bool disableTracking = true);
 
+    public Task<TResult?> SingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        CancellationToken cancellationToken = default,
+        bool ignoreQueryFilters = false,
+        bool ignoreAutoIncludes = false);
+
     Task<TResult?> GetFirstOrDefaultAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
+        CancellationToken cancellationToken = default,
         bool ignoreQueryFilters = false,
         bool ignoreAutoIncludes = false);
 

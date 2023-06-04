@@ -3,8 +3,8 @@ namespace JubilantBroccoli.Domain.Dtos.Item;
 
 public class OrderItemDto
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public int Count { get; set; }
-    public IEnumerable<Guid> ItemOptionIds { get; set; }
-    public Guid RestaurantId { get; set; }
+    public string[] ItemOptionIds { get; set; }
+    public string RestaurantId { get; set; }
 }

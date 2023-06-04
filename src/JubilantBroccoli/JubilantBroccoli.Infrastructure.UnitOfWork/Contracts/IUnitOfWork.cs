@@ -7,14 +7,14 @@ public interface IUnitOfWork<out TContext> : IUnitOfWork where TContext : DbCont
 {
     TContext DbContext { get; }
 
-    Task<int> SaveChangesAsync();
+    Task<int> SaveChangesAsync(CancellationToken token = default);
 }
 
 public interface IUnitOfWork : IDisposable
 {
     IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
 
-    Task<int> SaveChangesAsync();
+    Task<int> SaveChangesAsync(CancellationToken token=default);
 
     SaveChangesResult LastSaveChangesResult { get; }
 }

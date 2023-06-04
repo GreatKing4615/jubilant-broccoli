@@ -109,7 +109,7 @@ namespace JubilantBroccoli.Tests.Controllers
             var result = await _controller.PostUser(user);
 
             // Assert
-            var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var createdResult = Assert.IsType<CreatedResult>(result.Result);
             var userDto = Assert.IsType<UserDto>(createdResult.Value);
             Assert.Equal(User.Id, userDto.Id);
             Assert.Equal(User.UserName, userDto.UserName);

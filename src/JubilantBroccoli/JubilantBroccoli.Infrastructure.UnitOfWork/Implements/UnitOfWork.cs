@@ -31,7 +31,7 @@ public sealed class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TCont
         return (IRepository<TEntity>)_repositories[type];
     }
 
-    public async Task<int> SaveChangesAsync() => await DbContext.SaveChangesAsync();
+    public async Task<int> SaveChangesAsync(CancellationToken token=default) => await DbContext.SaveChangesAsync(token);
 
     public void Dispose()
     {

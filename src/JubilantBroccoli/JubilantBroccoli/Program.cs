@@ -75,6 +75,8 @@ try
             };
         });
 
+    services.AddTransient<IOrderService, OrderService>();
+
     var app = builder.Build();
     app.UseExceptionHandler(a => a.Run(async context =>
     {
@@ -107,6 +109,7 @@ try
     {
         await DataInitializer.InitializeAsync(scope.ServiceProvider);
     }
+
 
     app.Run();
 }

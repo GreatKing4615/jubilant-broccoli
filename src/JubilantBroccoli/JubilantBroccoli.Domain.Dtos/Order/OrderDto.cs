@@ -9,4 +9,5 @@ public class OrderDto
     public OrderStatus Status { get; set; }
     public ICollection<OrderItemDto> Items { get; set; }
     public DeliveryType DeliveryType { get; set; }
+    public TimeSpan? AverageTimeToReady { get; set; }
 }
