@@ -1,15 +1,17 @@
-﻿using JubilantBroccoli.BusinessLogic.Implementations.Base;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.BusinessLogic.Implementations.Base;
 using JubilantBroccoli.Domain.Models;
+using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-public class KebabPreparation : ItemPreparationTemplate
+public class KebabPreparation : ItemPreparationTemplate, IRecipe
 {
     private readonly ILogger _logger;
     private readonly string[] _candidatesToMeat = { "Cow", "Pig", "Rabbit", "Sheep", "Cat", "Dog", "chicken", "turkey" };
 
-    public KebabPreparation(ILogger<KebabPreparation> logger) : base(logger)
+    public KebabPreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
     {
         _logger = logger;
     }

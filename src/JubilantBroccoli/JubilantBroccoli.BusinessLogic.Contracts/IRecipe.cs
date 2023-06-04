@@ -2,7 +2,7 @@
 
 namespace JubilantBroccoli.BusinessLogic.Contracts;
 
-public interface IRestaurantService
+public interface IRecipe
 {
-    public Task ProcessOrder(Order order);
+    public Task CookByRecipe(string orderId, OrderedItem orderItem);
 }

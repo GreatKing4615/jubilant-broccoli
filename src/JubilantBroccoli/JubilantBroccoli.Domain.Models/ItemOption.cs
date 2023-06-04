@@ -22,11 +22,11 @@ public class ItemOption : IHaveId, IEquatable<ItemOption>
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((ItemOption) obj);
+        return Equals((ItemOption)obj);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, Name, (int) Type, Items);
+        return HashCode.Combine(Id, Name, (int)Type, Items);
     }
 }

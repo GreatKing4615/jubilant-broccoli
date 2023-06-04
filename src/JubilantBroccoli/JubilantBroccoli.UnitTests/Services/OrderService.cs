@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
-using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
@@ -13,6 +7,7 @@ using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace JubilantBroccoli.BusinessLogic.Tests
@@ -89,9 +84,9 @@ namespace JubilantBroccoli.BusinessLogic.Tests
                 CancellationToken.None,
                 false,
                 false)).ReturnsAsync(new User
-            {
-                Id = userId
-            });
+                {
+                    Id = userId
+                });
             _orderRepositoryMock.Setup(repo => repo.SingleOrDefault<Order>(
                 It.IsAny<Expression<Func<Order, Order>>>(),
                 It.IsAny<Expression<Func<Order, bool>>>(),

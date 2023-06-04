@@ -1,14 +1,16 @@
-﻿using JubilantBroccoli.BusinessLogic.Implementations.Base;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.BusinessLogic.Implementations.Base;
 using JubilantBroccoli.Domain.Models;
+using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-public class WokPreparation : ItemPreparationTemplate
+public class WokPreparation : ItemPreparationTemplate, IRecipe
 {
     private readonly ILogger _logger;
 
-    public WokPreparation(ILogger<WokPreparation> logger) : base(logger)
+    public WokPreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
     {
         _logger = logger;
     }

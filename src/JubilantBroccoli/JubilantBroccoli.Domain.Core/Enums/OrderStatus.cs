@@ -6,6 +6,7 @@ public enum OrderStatus
     WaitingPay,
     Cooking,
     Delivering,
+    WaitingPickup,
     Finished,
     Canceled
 }

@@ -1,6 +1,6 @@
 ﻿namespace JubilantBroccoli.Domain.Core.CustomExceptions;
 
-public class IncorrectStatusException: Exception
+public class IncorrectStatusException : Exception
 {
     public IncorrectStatusException()
     {

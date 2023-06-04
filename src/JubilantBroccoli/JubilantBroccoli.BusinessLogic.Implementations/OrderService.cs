@@ -180,10 +180,10 @@ public class OrderService : IOrderService
         switch (targetStatus)
         {
             case OrderStatus.Canceled:
-                allowedStatus = new List<OrderStatus> { OrderStatus.WaitingPay};
+                allowedStatus = new List<OrderStatus> { OrderStatus.WaitingPay };
                 break;
             case OrderStatus.Finished:
-                allowedStatus = new List<OrderStatus> { OrderStatus.Cooking, OrderStatus.Delivering};
+                allowedStatus = new List<OrderStatus> { OrderStatus.Cooking, OrderStatus.Delivering };
                 break;
             case OrderStatus.WaitingPay:
                 allowedStatus = new List<OrderStatus> { OrderStatus.InTheCart };

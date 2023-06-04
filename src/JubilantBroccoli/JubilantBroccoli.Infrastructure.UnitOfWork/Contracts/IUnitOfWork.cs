@@ -14,7 +14,7 @@ public interface IUnitOfWork : IDisposable
 {
     IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
 
-    Task<int> SaveChangesAsync(CancellationToken token=default);
+    Task<int> SaveChangesAsync(CancellationToken token = default);
 
     SaveChangesResult LastSaveChangesResult { get; }
 }

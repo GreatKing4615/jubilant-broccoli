@@ -18,6 +18,7 @@ public sealed class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TCont
         LastSaveChangesResult = new SaveChangesResult();
     }
 
+    //4)В программе должен быть реализован паттерн - Абстрактная фабрика
     public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
     {
         _repositories ??= new Dictionary<Type, object>();
@@ -31,7 +32,7 @@ public sealed class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TCont
         return (IRepository<TEntity>)_repositories[type];
     }
 
-    public async Task<int> SaveChangesAsync(CancellationToken token=default) => await DbContext.SaveChangesAsync(token);
+    public async Task<int> SaveChangesAsync(CancellationToken token = default) => await DbContext.SaveChangesAsync(token);
 
     public void Dispose()
     {

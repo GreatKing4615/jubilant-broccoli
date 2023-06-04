@@ -6,9 +6,6 @@ using JubilantBroccoli.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace JubilantBroccoli.Tests.Controllers
@@ -34,7 +31,7 @@ namespace JubilantBroccoli.Tests.Controllers
                 _mockJwtGenerator.Object,
                 _mockMapper.Object);
         }
-        
+
         [Fact]
         public async Task PostUser_InvalidModel_ReturnsBadRequest()
         {
@@ -73,7 +70,7 @@ namespace JubilantBroccoli.Tests.Controllers
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
         }
-        
+
         [Fact]
         public async Task PostUser_ValidModel_ReturnsCreatedResult()
         {
@@ -116,7 +113,7 @@ namespace JubilantBroccoli.Tests.Controllers
             Assert.Equal(User.Email, userDto.Email);
             Assert.Equal(user.Address, userDto.Address);
         }
-        
+
         [Fact]
         public async Task CreateBearerToken_ValidCredentials_ReturnsOkResultWithToken()
         {

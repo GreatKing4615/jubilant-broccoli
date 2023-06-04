@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using JubilantBroccoli.Domain.Core.Enums;
-using JubilantBroccoli.Domain.Dtos.Item;
 using JubilantBroccoli.Domain.Dtos.Restaurant;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
-using JubilantBroccoli.Infrastructure.UnitOfWork.Implements;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace JubilantBroccoli.Controllers;
 

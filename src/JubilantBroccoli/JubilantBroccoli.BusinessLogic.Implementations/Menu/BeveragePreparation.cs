@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BusinessLogic.Implementations.Menu;
 
-public class BurgerPreparation : ItemPreparationTemplate, IRecipe
+public class BeveragePreparation : ItemPreparationTemplate, IRecipe
 {
     private readonly ILogger _logger;
 
-    public BurgerPreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+    public BeveragePreparation(ILogger<ItemPreparationTemplate> logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
     {
         _logger = logger;
     }
@@ -23,7 +23,7 @@ public class BurgerPreparation : ItemPreparationTemplate, IRecipe
 
     protected override Task Serve(string id)
     {
-        _logger.LogInformation($"Order № {id} are ready. Put on the box and send to delivery");
+        _logger.LogInformation($"Order № {id} are ready. Put on the box and that's all");
         return Task.CompletedTask;
     }
 }

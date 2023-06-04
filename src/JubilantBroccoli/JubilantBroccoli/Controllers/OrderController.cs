@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Dtos.Item;
 using JubilantBroccoli.Domain.Dtos.Order;
-using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using JubilantBroccoli.Domain.Core.CustomExceptions;
 
 namespace JubilantBroccoli.Controllers
 {
@@ -123,8 +122,8 @@ namespace JubilantBroccoli.Controllers
             var response = _mapper.Map<OrderDto>(currentCart);
 
             return Ok(response);
-        }        
-        
+        }
+
         [HttpPost]
         public async Task<ActionResult<OrderDto>> ClearCart()
         {

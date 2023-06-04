@@ -1,4 +1,5 @@
-﻿using JubilantBroccoli.Domain.Models;
+﻿using JubilantBroccoli.Domain.Core.Enums;
+using JubilantBroccoli.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +11,7 @@ public class OrderedItemConfiguration : IEntityTypeConfiguration<OrderedItem>
     {
         builder.ToTable("OrderedItems");
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.Status).IsRequired().HasDefaultValue(ItemStatus.InOrder);
         builder.Property(x => x.CreatedAt).HasMaxLength(300).IsRequired();
         builder.Property(x => x.UpdatedAt).HasMaxLength(300);
     }
