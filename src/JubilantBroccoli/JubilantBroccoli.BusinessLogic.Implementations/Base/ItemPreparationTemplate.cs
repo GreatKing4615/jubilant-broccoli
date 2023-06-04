@@ -25,7 +25,8 @@ public abstract class ItemPreparationTemplate : IOrderProcessor
     {
         order.Status = OrderStatus.Cooking;
         _orderRepository.Update(order);
-        foreach (var item in order.OrderedItems.Where(x => x.Status != ItemStatus.Ready))
+        var remainingDishes = order.OrderedItems.Where(x => x.Status != ItemStatus.Ready).ToList();
+        foreach (var item in remainingDishes)
         {
             var recipeBook = new RecipeBook(_logger, _unitOfWork);
             var recipe = recipeBook.GetRecipe(item.Item.Type);

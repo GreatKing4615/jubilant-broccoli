@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace JubilantBroccoli.Tests.Controllers
+namespace JubilantBroccoli.UnitTests.Controllers
 {
     public class AccountControllerTests
     {

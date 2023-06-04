@@ -1,4 +1,5 @@
-﻿using JubilantBroccoli.BusinessLogic.Contracts;
+﻿using System.Linq.Expressions;
+using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
 using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
@@ -7,18 +8,17 @@ using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Linq.Expressions;
 using Xunit;
 
-namespace JubilantBroccoli.BusinessLogic.Tests
+namespace JubilantBroccoli.UnitTests.Services
 {
     public class OrderServiceTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<ILogger<OrderService>> _loggerMock;
         private readonly Mock<IRepository<Order>> _orderRepositoryMock;
-        private readonly Mock<IRepository<Item>> _itemRepositoryMock;
         private readonly Mock<IRepository<ItemOption>> _itemOptionRepositoryMock;
+        private readonly Mock<IRepository<Item>> _itemRepositoryMock;
         private readonly Mock<IRepository<User>> _userRepositoryMock;
 
         private readonly IOrderService _orderService;
@@ -28,13 +28,13 @@ namespace JubilantBroccoli.BusinessLogic.Tests
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _loggerMock = new Mock<ILogger<OrderService>>();
             _orderRepositoryMock = new Mock<IRepository<Order>>();
-            _itemRepositoryMock = new Mock<IRepository<Item>>();
             _itemOptionRepositoryMock = new Mock<IRepository<ItemOption>>();
+            _itemRepositoryMock = new Mock<IRepository<Item>>();
             _userRepositoryMock = new Mock<IRepository<User>>();
 
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Order>()).Returns(_orderRepositoryMock.Object);
-            _unitOfWorkMock.Setup(uow => uow.GetRepository<Item>()).Returns(_itemRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<ItemOption>()).Returns(_itemOptionRepositoryMock.Object);
+            _unitOfWorkMock.Setup(uow => uow.GetRepository<Item>()).Returns(_itemRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<User>()).Returns(_userRepositoryMock.Object);
 
             _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object);

@@ -1,4 +1,5 @@
-﻿using JubilantBroccoli.BusinessLogic.Implementations.Menu;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
+using JubilantBroccoli.BusinessLogic.Implementations.Menu;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ public class RecipeBook
         _logger = logger;
     }
 
-    public ItemPreparationTemplate GetRecipe(ItemType itemType)
+    public IRecipe GetRecipe(ItemType itemType)
     {
         switch (itemType)
         {

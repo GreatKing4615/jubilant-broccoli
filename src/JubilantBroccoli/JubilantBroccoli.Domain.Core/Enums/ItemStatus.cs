@@ -2,7 +2,7 @@
 
 public enum ItemStatus
 {
-    InOrder,
+    Pending,
     Cooking,
     Ready
 }
