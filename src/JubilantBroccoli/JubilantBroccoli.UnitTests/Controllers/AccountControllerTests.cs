@@ -13,14 +13,14 @@ namespace JubilantBroccoli.UnitTests.Controllers
     public class AccountControllerTests
     {
         private readonly AccountController _controller;
-        private readonly Mock<UserManager<User>> _mockUserManager;
+        private readonly Mock<UserManager<IdentityUser>> _mockUserManager;
         private readonly Mock<IJwtGenerator> _mockJwtGenerator;
         private readonly Mock<IMapper> _mockMapper;
 
         public AccountControllerTests()
         {
-            _mockUserManager = new Mock<UserManager<User>>(
-                Mock.Of<IUserStore<User>>(),
+            _mockUserManager = new Mock<UserManager<IdentityUser>>(
+                Mock.Of<IUserStore<IdentityUser>>(),
                 null, null, null, null, null, null, null, null);
 
             _mockJwtGenerator = new Mock<IJwtGenerator>();
@@ -36,7 +36,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
         public async Task PostUser_InvalidModel_ReturnsBadRequest()
         {
             // Arrange
-            var user = new AuthenticationRequest();
+            var user = new SignInRequest();
             _controller.ModelState.AddModelError("UserName", "The UserName field is required.");
 
             // Act
@@ -50,7 +50,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
         public async Task PostUser_CreateUserFailed_ReturnsBadRequest()
         {
             // Arrange
-            var user = new AuthenticationRequest
+            var user = new SignInRequest
             {
                 UserName = "testuser",
                 Email = "testuser@example.com",
@@ -75,7 +75,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
         public async Task PostUser_ValidModel_ReturnsCreatedResult()
         {
             // Arrange
-            var user = new AuthenticationRequest
+            var user = new SignInRequest
             {
                 UserName = "testuser",
                 Email = "testuser@example.com",
@@ -93,7 +93,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
             _mockUserManager.Setup(x => x.CreateAsync(It.IsAny<User>(), user.Password))
                 .ReturnsAsync(IdentityResult.Success);
 
-            _mockMapper.Setup(x => x.Map<UserDto>(It.IsAny<AuthenticationRequest>()))
+            _mockMapper.Setup(x => x.Map<UserDto>(It.IsAny<SignInRequest>()))
                 .Returns(new UserDto
                 {
                     Id = User.Id,
@@ -118,7 +118,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
         public async Task CreateBearerToken_ValidCredentials_ReturnsOkResultWithToken()
         {
             // Arrange
-            var request = new AuthenticationRequest
+            var request = new SignInRequest
             {
                 UserName = "testuser",
                 Password = "TestPassword"
@@ -151,7 +151,7 @@ namespace JubilantBroccoli.UnitTests.Controllers
         public async Task CreateBearerToken_InvalidCredentials_ReturnsBadRequest()
         {
             // Arrange
-            var request = new AuthenticationRequest
+            var request = new SignInRequest
             {
                 UserName = "testuser",
                 Password = "InvalidPassword"

@@ -5,8 +5,16 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+
+# install psql
+RUN apt-get update
+RUN apt-get -y install postgresql-client
+
+# make wait-for-postgres.sh executable
+RUN chmod +x ./wait-for-postgres.sh
 COPY ["JubilantBroccoli/JubilantBroccoli.csproj", "JubilantBroccoli/"]
 RUN dotnet restore "JubilantBroccoli/JubilantBroccoli.csproj"
 COPY . .

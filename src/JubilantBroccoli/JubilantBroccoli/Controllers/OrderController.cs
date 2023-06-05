@@ -54,17 +54,24 @@ namespace JubilantBroccoli.Controllers
                 return BadRequest(UserWithoutId);
             }
 
-            var currentCart = await _orderService.AddToCartAsync(
-                userId,
-                orderedItem.RestaurantId,
-                orderedItem.Count,
-                orderedItem.Id,
-                orderedItem.ItemOptionIds);
+            try
+            {
+                var currentCart = await _orderService.AddToCartAsync(
+                    userId,
+                    orderedItem.RestaurantId,
+                    orderedItem.Count,
+                    orderedItem.Id,
+                    orderedItem.ItemOptionIds);
 
-            var response = _mapper.Map<OrderDto>(currentCart);
+                var response = _mapper.Map<OrderDto>(currentCart);
 
-            return Ok(response);
+                return Ok(response);
 
+            }
+            catch (ItemNotFoundException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpDelete]
@@ -107,7 +114,7 @@ namespace JubilantBroccoli.Controllers
             }
             catch (IncorrectStatusException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
 
         }
@@ -132,6 +139,23 @@ namespace JubilantBroccoli.Controllers
         [HttpPost]
         [Route("/clear-cart")]
         public async Task<ActionResult<OrderDto>> ClearCart()
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest(UserWithoutId);
+            }
+
+            var currentCart = await _orderService.ClearCartAsync(userId);
+
+            var response = _mapper.Map<OrderDto>(currentCart);
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("/order-detail")]
+        public async Task<ActionResult<OrderDto>> OrderDetail()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))

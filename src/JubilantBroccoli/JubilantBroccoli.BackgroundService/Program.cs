@@ -1,27 +1,16 @@
 ﻿using Hangfire;
-using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
 using JubilantBroccoli.BackgroundService;
 using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
-using JubilantBroccoli.BusinessLogic.Implementations.Base;
 using JubilantBroccoli.BusinessLogic.Implementations.Menu;
 using JubilantBroccoli.Infrastructure.Core.Base;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Extensions;
-using JubilantBroccoli.Seed;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Events;
-
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -33,11 +22,25 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddHangfire(config =>
         {
             config.UsePostgreSqlStorage(connectionString);
-            config.UseSerilogLogProvider();
         });
         services.AddSingleton<PostgreSqlStorageOptions>();
-        services.AddHangfireServer();
-
+        services.AddHangfireServer(opt =>
+        {
+            opt.WorkerCount = 1;
+            opt.IsLightweightServer=true;
+        });
+        services.AddIdentityCore<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
     })
     .ConfigureServices((hostContext, services) =>
     {
@@ -48,8 +51,8 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddTransient<IOrderProcessor, WokPreparation>();
         services.AddTransient<IOrderProcessor, BeveragePreparation>();
         services.AddTransient<IOrderProcessor, KebabPreparation>();
-        services.AddScoped<OrderCheckService>();
-
+        //services.AddScoped<OrderCheckService>();
+        services.AddScoped<MockFlowService>();
     })
     .Build();
 using (var scope = host.Services.CreateScope())
@@ -59,8 +62,8 @@ using (var scope = host.Services.CreateScope())
     options.PrepareSchemaIfNecessary = true;
     
     var backgroundJobClient = serviceProvider.GetRequiredService<IBackgroundJobClient>();
-    backgroundJobClient.Enqueue<OrderCheckService>(x => x.ExecuteAsync(default));
-
+    //RecurringJob.AddOrUpdate<OrderCheckService>("OrderCheckService", x => x.ExecuteAsync(default), Cron.Minutely());
+    RecurringJob.AddOrUpdate<MockFlowService>("MockFlowService", x => x.ExecuteAsync(default), "*/1 * * * *");
     Console.WriteLine("Hangfire Server started.");
     host.Run();
 }

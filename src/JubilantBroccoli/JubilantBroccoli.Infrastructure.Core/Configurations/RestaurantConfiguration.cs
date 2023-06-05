@@ -1,6 +1,7 @@
 ﻿using JubilantBroccoli.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JubilantBroccoli.Infrastructure.Core.Configurations;
 
@@ -15,8 +16,7 @@ public class RestaurantConfiguration : IEntityTypeConfiguration<Restaurant>
         builder.Property(x => x.Closing).HasMaxLength(300).IsRequired();
         builder.Property(x => x.Opening).HasMaxLength(300).IsRequired();
         builder.Property(x => x.ItemTypes).HasMaxLength(300);
-
-        builder.HasMany(x => x.Orders).WithOne(x => x.Restaurant);
+        
         builder.HasMany(x => x.Items).WithMany(x => x.Restaurants);
 
         builder.HasIndex(x => x.Name);

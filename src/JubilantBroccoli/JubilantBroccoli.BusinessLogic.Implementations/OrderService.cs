@@ -3,6 +3,7 @@ using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,18 +14,21 @@ public class OrderService : IOrderService
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<Item> _itemRepository;
     private readonly IRepository<ItemOption> _itemOptionRepository;
-    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<OrderedItem> _orderedItemRepository;
+    //private readonly IRepository<IdentityUser> _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<OrderService> _logger;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public OrderService(IUnitOfWork unitOfWork, ILogger<OrderService> logger)
+    public OrderService(IUnitOfWork unitOfWork, ILogger<OrderService> logger, UserManager<IdentityUser> userManager)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _userManager = userManager;
         _orderRepository = unitOfWork.GetRepository<Order>();
         _itemRepository = unitOfWork.GetRepository<Item>();
         _itemOptionRepository = unitOfWork.GetRepository<ItemOption>();
-        _userRepository = unitOfWork.GetRepository<User>();
+        _orderedItemRepository = unitOfWork.GetRepository<OrderedItem>();
         _logger.LogInformation($"{nameof(OrderService)} are ready");
     }
 
@@ -48,7 +52,7 @@ public class OrderService : IOrderService
 
             await _orderRepository.InsertAsync(cart, token);
         }
-
+        
         return cart;
     }
 
@@ -82,15 +86,17 @@ public class OrderService : IOrderService
         }
         else
         {
-            var item = await _itemRepository.GetFirstOrDefaultAsync(
+            var item = await _itemRepository.SingleOrDefault(
                 selector: x => x,
                 predicate: x => x.Id == itemId,
                 cancellationToken: token);
+            if (item == null)
+                throw new ItemNotFoundException($"Item № {itemId} not found.");
             var itemOptionList = new List<ItemOption>();
 
             foreach (var itemOptionId in itemOptions)
             {
-                var itemOption = await _itemOptionRepository.GetFirstOrDefaultAsync(
+                var itemOption = await _itemOptionRepository.SingleOrDefault(
                     selector: x => x,
                     predicate: x => x.Id == itemOptionId,
                     cancellationToken: token);
@@ -100,11 +106,13 @@ public class OrderService : IOrderService
 
             var newOrderedItem = new OrderedItem
             {
-                Item = item,
+                ItemId = item.Id,
                 ItemOptions = itemOptionList,
-                Count = count
+                Count = count,
+                Order = currentCart
             };
 
+            await _orderedItemRepository.InsertAsync(newOrderedItem, token);
             currentCart.OrderedItems.Add(newOrderedItem);
         }
 
@@ -168,10 +176,27 @@ public class OrderService : IOrderService
         }
 
         cart.OrderedItems.Clear();
-
+        _orderRepository.Update(cart);
         await _unitOfWork.SaveChangesAsync(token);
 
         return cart;
+    }
+
+    public async Task<Order> GetById(string orderId, CancellationToken token = default)
+    {
+        var order = await _orderRepository.SingleOrDefault(
+            selector: x => x,
+            predicate: o => o.Id == orderId,
+            include: include => include.Include(o => o.OrderedItems).ThenInclude(x=>x.ItemOptions),
+            cancellationToken: token
+        );
+
+        if (order == null)
+        {
+            throw new Exception("Cart not found.");
+        }
+
+        return order;
     }
 
     public async Task<Order> ChangeOrderStatusAsync(string orderId, OrderStatus targetStatus, CancellationToken token = default)
@@ -187,6 +212,9 @@ public class OrderService : IOrderService
                 break;
             case OrderStatus.WaitingPay:
                 allowedStatus = new List<OrderStatus> { OrderStatus.InTheCart };
+                break;
+            case OrderStatus.Cooking:
+                allowedStatus = new List<OrderStatus> { OrderStatus.WaitingPay};
                 break;
             default: throw new IncorrectStatusException($"Order {orderId} try to set incorrect status = {targetStatus}");
         }
@@ -207,29 +235,21 @@ public class OrderService : IOrderService
         }
 
         order.Status = targetStatus;
-
+        _orderRepository.Update(order);
         await _unitOfWork.SaveChangesAsync(token);
 
         return order;
     }
-
+    
     private async Task<Order> CreateCart(string userId, CancellationToken token = default)
     {
-        var currentUser = await _userRepository.SingleOrDefault(
-            selector: x => x,
-            predicate: x => x.Id == userId,
-            cancellationToken: token
-        );
-        if (currentUser is null)
-        {
-            throw new Exception($"User with id = {userId} unknown");
-        }
+        var currentUser = await _userManager.FindByIdAsync(userId);
 
         var cart = new Order
         {
             User = currentUser,
             Status = OrderStatus.InTheCart,
-            OrderedItems = new List<OrderedItem>()
+            OrderedItems = new List<OrderedItem>(),
         };
         return cart;
     }

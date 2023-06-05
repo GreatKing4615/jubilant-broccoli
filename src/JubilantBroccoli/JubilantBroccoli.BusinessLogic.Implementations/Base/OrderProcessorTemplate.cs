@@ -33,6 +33,8 @@ public abstract class OrderProcessorTemplate : IOrderProcessor
             await recipe.CookByRecipe(order.Id, item);
         }
         await Delivery(order, order.DeliveryType, order.DeliveryTime, order.DeliveryAddress);
+        _orderRepository.Update(order);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     /// <summary>

@@ -11,12 +11,12 @@ namespace JubilantBroccoli.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IJwtGenerator _jwtGenerator;
 
         public AccountController(
-            UserManager<User> userManager,
+            UserManager<IdentityUser> userManager,
             IJwtGenerator jwtGenerator,
             IMapper mapper)
         {
@@ -26,7 +26,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> PostUser(AuthenticationRequest user)
+        public async Task<ActionResult<UserDto>> PostUser(SignInRequest user)
         {
             if (!ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace JubilantBroccoli.Controllers
         }
 
         [HttpPost("BearerToken")]
-        public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(AuthenticationRequest request)
+        public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(LoginRequest request)
         {
             if (!ModelState.IsValid)
             {

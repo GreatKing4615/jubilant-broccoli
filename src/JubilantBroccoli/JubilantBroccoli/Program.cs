@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using JubilantBroccoli.BusinessLogic.Implementations.Base;
 using JubilantBroccoli.BusinessLogic.Implementations.Menu;
+using JubilantBroccoli.Domain.Models;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()

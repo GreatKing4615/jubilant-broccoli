@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JubilantBroccoli.Infrastructure.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230604133407_Add status for ordered items")]
-    partial class Addstatusforordereditems
+    [Migration("20230604231711_Main migration")]
+    partial class Mainmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<TimeSpan>("DeliveryTime")
+                        .HasMaxLength(300)
                         .HasColumnType("interval");
 
                     b.Property<int>("DeliveryType")
@@ -142,7 +143,10 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("RestaurantId")
-                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("RestaurantId1")
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
@@ -157,11 +161,18 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RestaurantId");
 
+                    b.HasIndex("RestaurantId1");
+
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders", (string)null);
                 });
@@ -184,7 +195,6 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OrderId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
@@ -497,14 +507,22 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
             modelBuilder.Entity("JubilantBroccoli.Domain.Models.Order", b =>
                 {
                     b.HasOne("JubilantBroccoli.Domain.Models.Restaurant", "Restaurant")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JubilantBroccoli.Domain.Models.User", "User")
+                    b.HasOne("JubilantBroccoli.Domain.Models.Restaurant", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("RestaurantId1");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.HasOne("JubilantBroccoli.Domain.Models.User", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Restaurant");
 
@@ -516,14 +534,12 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                     b.HasOne("JubilantBroccoli.Domain.Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JubilantBroccoli.Domain.Models.Order", "Order")
                         .WithMany("OrderedItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Item");
 
@@ -601,6 +617,11 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                 });
 
             modelBuilder.Entity("JubilantBroccoli.Domain.Models.Restaurant", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("JubilantBroccoli.Domain.Models.User", b =>
                 {
                     b.Navigation("Orders");
                 });

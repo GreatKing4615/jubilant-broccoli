@@ -13,7 +13,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Email);
         builder.Property(x => x.UserName);
         builder.Property(x => x.Address).HasMaxLength(3000).IsRequired(false);
-        builder.Ignore(x => x.Orders);
         builder.Property(x => x.Role).IsRequired().HasDefaultValue(AppData.UserRoleName);
+        builder.HasMany(x => x.Orders);
     }
 }

@@ -23,8 +23,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {
-        }
+            => SaveChangesResult = new SaveChangesResult();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -34,23 +33,57 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
 
         private void DbSaveChanges()
         {
+            // Added
+
+            const string defaultUser = "dev@calabonga.net";
+            var defaultDate = DateTime.UtcNow;
+
             var addedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
 
-            foreach (var entity in addedEntities)
+            foreach (var entry in addedEntities)
             {
-                if (entity.Entity is not IAuditable)
+                if (entry.Entity is not IAuditable)
+                {
                     return;
+                }
+                
+                var createdAt = entry.Property(nameof(IAuditable.CreatedAt)).CurrentValue;
+                var updatedAt = entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue;
 
-                var createdAt = entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue;
-                var updatedAt = entity.Property(nameof(IAuditable.UpdatedAt)).CurrentValue;
+                if (DateTime.Parse(createdAt?.ToString()!).Year < 1970)
+                {
+                    entry.Property(nameof(IAuditable.CreatedAt)).CurrentValue = defaultDate;
+                }
 
-                if (!DateTime.TryParse(createdAt.ToString(), out var parsedCreatedAt))
-                    entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue = _defaultDatetime;
-                if (updatedAt != null && !DateTime.TryParse(updatedAt.ToString(), out var parsedUpdatedAt))
-                    entity.Property(nameof(IAuditable.CreatedAt)).CurrentValue = _defaultDatetime;
+                if (updatedAt != null && DateTime.Parse(updatedAt.ToString()!).Year < 1970)
+                {
+                    entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue = defaultDate;
+                }
+                else
+                {
+                    entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue = defaultDate;
+                }
 
+                SaveChangesResult.AddMessage("Some entities were created");
             }
+            // Modified
+
             var modifiedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
+
+            foreach (var entry in modifiedEntities)
+            {
+                if (entry.Entity is IAuditable)
+                {
+                    entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue = DateTime.UtcNow; }
+
+                SaveChangesResult.AddMessage("Some entities were modified");
+            }
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            DbSaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

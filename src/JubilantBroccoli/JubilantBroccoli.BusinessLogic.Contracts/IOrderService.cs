@@ -11,5 +11,6 @@ public interface IOrderService
     public Task<Order> AddToCartAsync(string userId, string restaurantId, int count, string itemId, string[] itemOptions, CancellationToken token = default);
     public Task<Order> RemoveFromCartAsync(string userId, string itemId, CancellationToken token = default);
     public Task<Order> ClearCartAsync(string orderId, CancellationToken token = default);
+    public Task<Order> GetById(string orderId, CancellationToken token = default);
     public Task<Order> ChangeOrderStatusAsync(string orderId, OrderStatus targetStatus, CancellationToken token = default);
 }

@@ -1,5 +1,7 @@
-﻿using JubilantBroccoli.Domain.Core.Contracts;
+﻿using System.Text.Json.Serialization;
+using JubilantBroccoli.Domain.Core.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
+using Newtonsoft.Json.Converters;
 
 namespace JubilantBroccoli.Domain.Models;
 
@@ -7,8 +9,10 @@ public class ItemOption : IHaveId, IEquatable<ItemOption>
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public ItemType Type { get; set; }
     public ICollection<Item> Items { get; set; }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public ItemType Type { get; set; }
 
     public bool Equals(ItemOption? other)
     {

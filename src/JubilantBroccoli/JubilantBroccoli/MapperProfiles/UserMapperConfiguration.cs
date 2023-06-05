@@ -9,7 +9,7 @@ namespace JubilantBroccoli.MapperProfiles
     {
         public UserMapperConfiguration()
         {
-            CreateMap<UserDto, AuthenticationRequest>()
+            CreateMap<UserDto, SignInRequest>()
                 .ForMember(x => x.Password, x => x.Ignore())
                 .ReverseMap();
             CreateMap<UserDto, User>()

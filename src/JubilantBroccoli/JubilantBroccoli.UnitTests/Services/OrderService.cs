@@ -5,6 +5,7 @@ using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -22,6 +23,7 @@ namespace JubilantBroccoli.UnitTests.Services
         private readonly Mock<IRepository<User>> _userRepositoryMock;
 
         private readonly IOrderService _orderService;
+        private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
 
         public OrderServiceTests()
         {
@@ -31,13 +33,15 @@ namespace JubilantBroccoli.UnitTests.Services
             _itemOptionRepositoryMock = new Mock<IRepository<ItemOption>>();
             _itemRepositoryMock = new Mock<IRepository<Item>>();
             _userRepositoryMock = new Mock<IRepository<User>>();
+            _userManagerMock = new Mock<UserManager<IdentityUser>>(); // Создание мока для UserManager<IdentityUser>
+
 
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Order>()).Returns(_orderRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<ItemOption>()).Returns(_itemOptionRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Item>()).Returns(_itemRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<User>()).Returns(_userRepositoryMock.Object);
 
-            _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object);
+            _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object, _userManagerMock.Object);
         }
 
         [Fact]
@@ -473,7 +477,8 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var orderService = new OrderService(
                 _unitOfWorkMock.Object,
-                _loggerMock.Object);
+                _loggerMock.Object,
+                _userManagerMock.Object);
 
             // Act
             var result = await orderService.RemoveFromCartAsync(userId, itemId, token);
@@ -522,7 +527,8 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var orderService = new OrderService(
                 _unitOfWorkMock.Object,
-                _loggerMock.Object);
+                _loggerMock.Object, 
+                _userManagerMock.Object);
 
             // Act
             var result = await orderService.RemoveFromCartAsync(userId, itemId, token);

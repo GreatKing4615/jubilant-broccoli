@@ -4,6 +4,7 @@ using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace JubilantBroccoli.BackgroundService;
@@ -29,7 +30,12 @@ public class OrderCheckService
 
             var cookingOrders = _orderRepository.GetAll(
                 selector: x => x,
-                predicate: x => new[] { OrderStatus.Cooking, OrderStatus.Delivering }.Contains(x.Status)
+                predicate: x => new[] { OrderStatus.Cooking, OrderStatus.Delivering }.Contains(x.Status),
+                include: include => include
+                    .Include(o => o.OrderedItems)
+                    .ThenInclude(oi => oi.Item)
+                    .Include(o => o.OrderedItems)
+                    .ThenInclude(oi => oi.ItemOptions)
             ).ToList();
 
             foreach (var order in cookingOrders)
