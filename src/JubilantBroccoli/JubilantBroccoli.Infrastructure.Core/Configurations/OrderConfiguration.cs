@@ -1,5 +1,4 @@
-﻿using JubilantBroccoli.Domain.Core.Enums;
-using JubilantBroccoli.Domain.Models;
+﻿using JubilantBroccoli.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

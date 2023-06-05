@@ -46,7 +46,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
                 {
                     return;
                 }
-                
+
                 var createdAt = entry.Property(nameof(IAuditable.CreatedAt)).CurrentValue;
                 var updatedAt = entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue;
 
@@ -74,7 +74,8 @@ namespace JubilantBroccoli.Infrastructure.Core.Base
             {
                 if (entry.Entity is IAuditable)
                 {
-                    entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue = DateTime.UtcNow; }
+                    entry.Property(nameof(IAuditable.UpdatedAt)).CurrentValue = DateTime.UtcNow;
+                }
 
                 SaveChangesResult.AddMessage("Some entities were modified");
             }

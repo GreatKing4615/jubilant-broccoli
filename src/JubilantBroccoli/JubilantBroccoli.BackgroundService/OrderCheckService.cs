@@ -1,6 +1,4 @@
-﻿using Hangfire;
-using Hangfire.Common;
-using JubilantBroccoli.BusinessLogic.Contracts;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;

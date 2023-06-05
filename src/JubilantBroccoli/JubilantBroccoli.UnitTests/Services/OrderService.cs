@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using JubilantBroccoli.BusinessLogic.Contracts;
+﻿using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
 using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace JubilantBroccoli.UnitTests.Services
@@ -527,7 +527,7 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var orderService = new OrderService(
                 _unitOfWorkMock.Object,
-                _loggerMock.Object, 
+                _loggerMock.Object,
                 _userManagerMock.Object);
 
             // Act

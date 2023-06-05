@@ -52,7 +52,7 @@ public class OrderService : IOrderService
 
             await _orderRepository.InsertAsync(cart, token);
         }
-        
+
         return cart;
     }
 
@@ -187,7 +187,7 @@ public class OrderService : IOrderService
         var order = await _orderRepository.SingleOrDefault(
             selector: x => x,
             predicate: o => o.Id == orderId,
-            include: include => include.Include(o => o.OrderedItems).ThenInclude(x=>x.ItemOptions),
+            include: include => include.Include(o => o.OrderedItems).ThenInclude(x => x.ItemOptions),
             cancellationToken: token
         );
 
@@ -214,7 +214,7 @@ public class OrderService : IOrderService
                 allowedStatus = new List<OrderStatus> { OrderStatus.InTheCart };
                 break;
             case OrderStatus.Cooking:
-                allowedStatus = new List<OrderStatus> { OrderStatus.WaitingPay};
+                allowedStatus = new List<OrderStatus> { OrderStatus.WaitingPay };
                 break;
             default: throw new IncorrectStatusException($"Order {orderId} try to set incorrect status = {targetStatus}");
         }
@@ -240,7 +240,7 @@ public class OrderService : IOrderService
 
         return order;
     }
-    
+
     private async Task<Order> CreateCart(string userId, CancellationToken token = default)
     {
         var currentUser = await _userManager.FindByIdAsync(userId);

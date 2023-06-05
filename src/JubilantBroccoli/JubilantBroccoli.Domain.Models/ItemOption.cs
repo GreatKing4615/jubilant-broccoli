@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using JubilantBroccoli.Domain.Core.Contracts;
+﻿using JubilantBroccoli.Domain.Core.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
 using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace JubilantBroccoli.Domain.Models;
 

@@ -59,7 +59,7 @@ public class MockFlowService
 
         var rest = (await _unitOfWork.GetRepository<Restaurant>().GetPagedListAsync(
             selector: x => x,
-            include: x => x.Include(x => x.Items).ThenInclude(x=>x.ItemOptions)
+            include: x => x.Include(x => x.Items).ThenInclude(x => x.ItemOptions)
         )).Items.MinBy(x => Guid.NewGuid());
 
         var items = rest.Items.OrderBy(x => Guid.NewGuid()).Take(Randomiser.GetRandomNumber(5)).ToList();

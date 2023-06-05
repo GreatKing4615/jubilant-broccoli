@@ -2,7 +2,7 @@
 
 namespace JubilantBroccoli.Domain.Dtos.User;
 
-public class SignInRequest: LoginRequest
+public class SignInRequest : LoginRequest
 {
     [Required]
     public string Email { get; set; }

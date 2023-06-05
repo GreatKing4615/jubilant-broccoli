@@ -11,7 +11,7 @@ public class Order : Auditable
     public IdentityUser User { get; set; }
     public string? DeliveryAddress { get; set; }
     public List<OrderedItem> OrderedItems { get; set; } = new();
-    
+
     public TimeSpan DeliveryTime { get; set; }
     public string? RestaurantId { get; set; }
     public Restaurant Restaurant { get; set; }

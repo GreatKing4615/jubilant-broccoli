@@ -1,5 +1,6 @@
 using JubilantBroccoli.BusinessLogic.Contracts;
 using JubilantBroccoli.BusinessLogic.Implementations;
+using JubilantBroccoli.BusinessLogic.Implementations.Menu;
 using JubilantBroccoli.Infrastructure.Core.Base;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Extensions;
 using JubilantBroccoli.Seed;
@@ -12,9 +13,6 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text;
-using JubilantBroccoli.BusinessLogic.Implementations.Base;
-using JubilantBroccoli.BusinessLogic.Implementations.Menu;
-using JubilantBroccoli.Domain.Models;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
