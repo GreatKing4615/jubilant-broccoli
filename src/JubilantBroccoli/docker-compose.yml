@@ -2,12 +2,12 @@ version: '3.4'
 services:
   jubilantbroccoli:
     image: ${DOCKER_REGISTRY-}jubilantbroccoli
-    command: ./../wait-for-postgres.sh db ./jubilantbroccoli
     build:
       context: .
       dockerfile: JubilantBroccoli/Dockerfile
     depends_on:
-        - broccoli.db
+        broccoli.db:
+            condition: service_healthy
     ports:
       - "5001:443"
       - "8080:80"  
@@ -15,19 +15,17 @@ services:
 
   jubilantbroccoli.backgroudservice:
     image: ${DOCKER_REGISTRY-}jubilantbroccolibackgroundservice
-    command:  ./../wait-for-postgres.sh db ./jubilantbroccoli.backgroudservice
     build:
       context: .
       dockerfile: JubilantBroccoli.BackgroundService/Dockerfile
     deploy:
       resources:
         limits:
-            cpus: '0.1'
             memory: 1G
     restart: always
     depends_on:
-        - broccoli.db
-        - jubilantbroccoli
+        broccoli.db:
+            condition: service_healthy
 
   broccoli.db:
     image: postgres:13.3
@@ -41,4 +39,9 @@ services:
     ports:
       - "5401:5432"
     container_name: broccoli-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     restart: always

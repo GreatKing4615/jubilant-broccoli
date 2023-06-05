@@ -62,7 +62,7 @@ public class MockFlowService
             include: x => x.Include(x => x.Items).ThenInclude(x => x.ItemOptions)
         )).Items.MinBy(x => Guid.NewGuid());
 
-        var items = rest.Items.OrderBy(x => Guid.NewGuid()).Take(Randomiser.GetRandomNumber(5)).ToList();
+        var items = rest.Items.OrderBy(x => Guid.NewGuid()).Take(Randomiser.GetRandomNumber(1, 5)).ToList();
 
         _logger.LogInformation($"Pokemon choose - {rest.Name} and {string.Join(",", items.Select(x => x.Name))}");
         foreach (var item in items)

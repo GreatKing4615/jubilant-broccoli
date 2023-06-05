@@ -18,7 +18,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(x => x.UpdatedAt).HasMaxLength(300).IsRequired();
         builder.Property(x => x.RestaurantId).HasMaxLength(300).IsRequired(false);
 
+
         builder.HasOne(x => x.Restaurant).WithMany().HasForeignKey(x => x.RestaurantId);
+        builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
     }
 
 }

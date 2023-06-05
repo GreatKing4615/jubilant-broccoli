@@ -3,7 +3,6 @@ using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -15,20 +14,19 @@ public class OrderService : IOrderService
     private readonly IRepository<Item> _itemRepository;
     private readonly IRepository<ItemOption> _itemOptionRepository;
     private readonly IRepository<OrderedItem> _orderedItemRepository;
-    //private readonly IRepository<IdentityUser> _userRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<OrderService> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
 
-    public OrderService(IUnitOfWork unitOfWork, ILogger<OrderService> logger, UserManager<IdentityUser> userManager)
+    public OrderService(IUnitOfWork unitOfWork, ILogger<OrderService> logger)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;
-        _userManager = userManager;
         _orderRepository = unitOfWork.GetRepository<Order>();
         _itemRepository = unitOfWork.GetRepository<Item>();
         _itemOptionRepository = unitOfWork.GetRepository<ItemOption>();
         _orderedItemRepository = unitOfWork.GetRepository<OrderedItem>();
+        _userRepository = unitOfWork.GetRepository<User>();
         _logger.LogInformation($"{nameof(OrderService)} are ready");
     }
 
@@ -89,6 +87,7 @@ public class OrderService : IOrderService
             var item = await _itemRepository.SingleOrDefault(
                 selector: x => x,
                 predicate: x => x.Id == itemId,
+                include: include => include.Include(oi => oi.ItemOptions),
                 cancellationToken: token);
             if (item == null)
                 throw new ItemNotFoundException($"Item № {itemId} not found.");
@@ -96,11 +95,7 @@ public class OrderService : IOrderService
 
             foreach (var itemOptionId in itemOptions)
             {
-                var itemOption = await _itemOptionRepository.SingleOrDefault(
-                    selector: x => x,
-                    predicate: x => x.Id == itemOptionId,
-                    cancellationToken: token);
-                _logger.LogWarning($"ItemOption {itemOption} is null");
+                var itemOption = item.ItemOptions.SingleOrDefault(x => x.Id == itemOptionId);
                 itemOptionList.Add(itemOption);
             }
 
@@ -109,9 +104,8 @@ public class OrderService : IOrderService
                 ItemId = item.Id,
                 ItemOptions = itemOptionList,
                 Count = count,
-                Order = currentCart
+                OrderId = currentCart.Id
             };
-
             await _orderedItemRepository.InsertAsync(newOrderedItem, token);
             currentCart.OrderedItems.Add(newOrderedItem);
         }
@@ -125,13 +119,13 @@ public class OrderService : IOrderService
         var cart = await GetCurrentCartAsync(userId, token);
         if (cart == null)
         {
-            throw new Exception("Cart not found.");
+            throw new ItemNotFoundException("Cart not found.");
         }
 
         var orderedItem = cart.OrderedItems.FirstOrDefault(oi => oi.Item.Id == itemId);
         if (orderedItem == null)
         {
-            throw new Exception("Item not found in the cart.");
+            throw new ItemNotFoundException("Item not found in the cart.");
         }
 
         if (orderedItem.Count > 1)
@@ -172,7 +166,8 @@ public class OrderService : IOrderService
 
         if (cart == null)
         {
-            throw new Exception("Cart not found.");
+            _logger.LogInformation($"Cart № {orderId} are empty");
+            return cart;
         }
 
         cart.OrderedItems.Clear();
@@ -225,7 +220,7 @@ public class OrderService : IOrderService
         );
         if (order == null)
         {
-            throw new Exception("Order not found.");
+            throw new ItemNotFoundException("Order not found.");
         }
         if (!allowedStatus.Contains(order.Status))
         {
@@ -243,11 +238,14 @@ public class OrderService : IOrderService
 
     private async Task<Order> CreateCart(string userId, CancellationToken token = default)
     {
-        var currentUser = await _userManager.FindByIdAsync(userId);
+        var currentUser = await _userRepository.SingleOrDefault(
+            selector: x => x,
+            predicate: x => x.Id == userId,
+            cancellationToken: token);
 
         var cart = new Order
         {
-            User = currentUser,
+            UserId = currentUser.Id,
             Status = OrderStatus.InTheCart,
             OrderedItems = new List<OrderedItem>(),
         };

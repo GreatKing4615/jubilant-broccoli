@@ -23,14 +23,14 @@ public class ItemController : Controller
 
     [HttpGet]
     [Route("/items")]
-    public async Task<ActionResult<IPagedList<ItemDto>>> GetItems(string restaurantId)
+    public async Task<ActionResult<IPagedList<ItemDtoResponse>>> GetItems(string restaurantId)
     {
         var restaurantsPagedList = await _restaurantRepository.GetPagedListAsync(
             selector: x => x,
             predicate: x => x.Restaurants.Any(r => r.Id == restaurantId)
             );
 
-        var response = _mapper.Map<IPagedList<ItemDto>>(restaurantsPagedList);
+        var response = _mapper.Map<IPagedList<ItemDtoResponse>>(restaurantsPagedList);
 
         return Ok(response);
     }

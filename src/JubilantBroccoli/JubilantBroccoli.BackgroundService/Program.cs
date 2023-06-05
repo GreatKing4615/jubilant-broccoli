@@ -53,8 +53,9 @@ using (var scope = host.Services.CreateScope())
     options.PrepareSchemaIfNecessary = true;
 
     var backgroundJobClient = serviceProvider.GetRequiredService<IBackgroundJobClient>();
-    RecurringJob.AddOrUpdate<OrderCheckService>("OrderCheckService", x => x.ExecuteAsync(default), Cron.Minutely());
-    RecurringJob.AddOrUpdate<MockFlowService>("MockFlowService", x => x.ExecuteAsync(default), "*/1 * * * *");
+    backgroundJobClient.Enqueue<OrderCheckService>(x => x.ExecuteAsync(default));
+    backgroundJobClient.Enqueue<MockFlowService>(x => x.ExecuteAsync(default));
+    //RecurringJob.AddOrUpdate<MockFlowService>("MockFlowService", x => x.ExecuteAsync(default), "*/1 * * * *");
     Console.WriteLine("Hangfire Server started.");
     host.Run();
 }

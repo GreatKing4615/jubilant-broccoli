@@ -1,7 +1,5 @@
 ﻿using JubilantBroccoli.Domain.Core.Contracts;
 using JubilantBroccoli.Domain.Core.Enums;
-using Newtonsoft.Json.Converters;
-using System.Text.Json.Serialization;
 
 namespace JubilantBroccoli.Domain.Models;
 
@@ -14,10 +12,6 @@ public class Item : IHaveId
     public double Weight { get; set; }
     public ICollection<ItemOption> ItemOptions { get; set; }
     public ICollection<Restaurant> Restaurants { get; set; }
-
-    [JsonConverter(typeof(StringEnumConverter))]
     public Unit Unit { get; set; }
-
-    [JsonConverter(typeof(StringEnumConverter))]
     public ItemType Type { get; set; }
 }

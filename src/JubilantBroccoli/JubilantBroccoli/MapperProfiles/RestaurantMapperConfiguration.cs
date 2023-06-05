@@ -9,13 +9,11 @@ namespace JubilantBroccoli.MapperProfiles
     {
         public RestaurantMapperConfiguration()
         {
-            CreateMap<RestaurantDto, Restaurant>()
-                .ForMember(x => x.Orders, x => x.Ignore())
+            CreateMap<Restaurant, RestaurantDtoResponse>()
                 .ReverseMap();
 
-
-            CreateMap<IPagedList<Restaurant>, IPagedList<RestaurantDto>>()
-                .ConvertUsing<PagedListConverter<Restaurant, RestaurantDto>>();
+            CreateMap<IPagedList<Restaurant>, IPagedList<RestaurantDtoResponse>>()
+                    .ConvertUsing<PagedListConverter<Restaurant, RestaurantDtoResponse>>();
         }
     }
 }

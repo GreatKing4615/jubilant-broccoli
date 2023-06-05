@@ -15,6 +15,7 @@ public class OrderedItemConfiguration : IEntityTypeConfiguration<OrderedItem>
         builder.Property(x => x.CreatedAt).HasMaxLength(300).IsRequired();
         builder.Property(x => x.UpdatedAt).HasMaxLength(300);
 
+        builder.HasOne(x => x.Order).WithMany().HasForeignKey(x => x.OrderId);
         builder.HasOne(oi => oi.Item).WithMany().HasForeignKey(oi => oi.ItemId).OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -5,14 +5,6 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-
-# install psql
-RUN apt-get update
-RUN apt-get -y install postgresql-client
-
-# make wait-for-postgres.sh executable
-RUN chmod +x ./wait-for-postgres.sh
-
 COPY ["JubilantBroccoli.BackgroundService/JubilantBroccoli.BackgroundService.csproj", "JubilantBroccoli.BackgroundService/"]
 COPY ["JubilantBroccoli.BusinessLogic.Contracts/JubilantBroccoli.BusinessLogic.Contracts.csproj", "JubilantBroccoli.BusinessLogic.Contracts/"]
 COPY ["JubilantBroccoli.Domain.Models/JubilantBroccoli.Domain.Models.csproj", "JubilantBroccoli.Domain.Models/"]

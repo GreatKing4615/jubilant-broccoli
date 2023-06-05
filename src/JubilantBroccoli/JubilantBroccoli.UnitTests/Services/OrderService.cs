@@ -4,7 +4,6 @@ using JubilantBroccoli.Domain.Core.CustomExceptions;
 using JubilantBroccoli.Domain.Core.Enums;
 using JubilantBroccoli.Domain.Models;
 using JubilantBroccoli.Infrastructure.UnitOfWork.Contracts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -23,7 +22,6 @@ namespace JubilantBroccoli.UnitTests.Services
         private readonly Mock<IRepository<User>> _userRepositoryMock;
 
         private readonly IOrderService _orderService;
-        private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
 
         public OrderServiceTests()
         {
@@ -33,7 +31,6 @@ namespace JubilantBroccoli.UnitTests.Services
             _itemOptionRepositoryMock = new Mock<IRepository<ItemOption>>();
             _itemRepositoryMock = new Mock<IRepository<Item>>();
             _userRepositoryMock = new Mock<IRepository<User>>();
-            _userManagerMock = new Mock<UserManager<IdentityUser>>(); // Создание мока для UserManager<IdentityUser>
 
 
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Order>()).Returns(_orderRepositoryMock.Object);
@@ -41,7 +38,7 @@ namespace JubilantBroccoli.UnitTests.Services
             _unitOfWorkMock.Setup(uow => uow.GetRepository<Item>()).Returns(_itemRepositoryMock.Object);
             _unitOfWorkMock.Setup(uow => uow.GetRepository<User>()).Returns(_userRepositoryMock.Object);
 
-            _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object, _userManagerMock.Object);
+            _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -106,7 +103,7 @@ namespace JubilantBroccoli.UnitTests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(userId, result.User.Id);
+            Assert.Equal(userId, result.UserId);
             Assert.Equal(OrderStatus.InTheCart, result.Status);
         }
 
@@ -175,10 +172,10 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var newItem = new Item { Id = itemId };
             var newOptions = new List<ItemOption>
-            {
-                new ItemOption { Id = "option1" },
-                new ItemOption { Id = "option2" }
-            };
+    {
+        new ItemOption { Id = "option1" },
+        new ItemOption { Id = "option2" }
+    };
 
             var existingCart = new Order
             {
@@ -199,26 +196,26 @@ namespace JubilantBroccoli.UnitTests.Services
                 false)).ReturnsAsync(existingCart);
 
             _itemRepositoryMock.Setup(repo => repo.GetFirstOrDefaultAsync<Item>(
-                    It.IsAny<Expression<Func<Item, Item>>>(),
-                    It.IsAny<Expression<Func<Item, bool>>>(),
-                    null,
-                    null,
-                    true,
-                    CancellationToken.None,
-                    false,
-                    false))
-                .ReturnsAsync(newItem);
+                It.IsAny<Expression<Func<Item, Item>>>(),
+                It.IsAny<Expression<Func<Item, bool>>>(),
+                null,
+                null,
+                true,
+                CancellationToken.None,
+                false,
+                false))
+                .ReturnsAsync((Item)null); // Возвращаем null, чтобы вызвать исключение
 
             var firstCall = true;
             _itemOptionRepositoryMock.Setup(repo => repo.GetFirstOrDefaultAsync<ItemOption>(
-                    It.IsAny<Expression<Func<ItemOption, ItemOption>>>(),
-                    It.IsAny<Expression<Func<ItemOption, bool>>>(),
-                    null,
-                    null,
-                    true,
-                    CancellationToken.None,
-                    false,
-                    false))
+                It.IsAny<Expression<Func<ItemOption, ItemOption>>>(),
+                It.IsAny<Expression<Func<ItemOption, bool>>>(),
+                null,
+                null,
+                true,
+                CancellationToken.None,
+                false,
+                false))
                 .ReturnsAsync(() =>
                 {
                     if (firstCall)
@@ -232,16 +229,87 @@ namespace JubilantBroccoli.UnitTests.Services
                     }
                 });
 
+            // Act and Assert
+            await Assert.ThrowsAsync<ItemNotFoundException>(async () =>
+            {
+                await _orderService.AddToCartAsync(userId, restaurantId, itemCount, itemId, itemOptions);
+            });
+        }
+
+
+        [Fact]
+        public async Task AddToCartAsync2_ItemExistsInCart_IncrementsItemCount()
+        {
+            // Arrange
+            var userId = "1";
+            var restaurantId = "restaurant1";
+            var itemId = "item1";
+            var itemOptions = new string[] { "option1", "option2" };
+            var itemCount = 2;
+
+            var existingCart = new Order
+            {
+                Id = "cart1",
+                User = new User { Id = userId },
+                Status = OrderStatus.InTheCart,
+                OrderedItems = new List<OrderedItem>
+        {
+            new OrderedItem
+            {
+                Item = new Item { Id = itemId },
+                ItemOptions = new List<ItemOption>
+                {
+                    new ItemOption { Id = "option1" },
+                    new ItemOption { Id = "option2" }
+                },
+                Count = 1
+            }
+        }
+            };
+
+            _orderRepositoryMock.Setup(repo => repo.SingleOrDefault<Order>(
+                It.IsAny<Expression<Func<Order, Order>>>(),
+                It.IsAny<Expression<Func<Order, bool>>>(),
+                null,
+                It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>(),
+                true,
+                CancellationToken.None,
+                false,
+                false)).ReturnsAsync(existingCart);
+
             // Act
             var result = await _orderService.AddToCartAsync(userId, restaurantId, itemCount, itemId, itemOptions);
 
             // Assert
             Assert.Equal(existingCart, result);
             Assert.Single(result.OrderedItems);
-            Assert.Equal(newItem, result.OrderedItems.First().Item);
-            Assert.Equal(newOptions, result.OrderedItems.First().ItemOptions);
-            Assert.Equal(itemCount, result.OrderedItems.First().Count);
+            Assert.Equal(itemId, result.OrderedItems.First().Item.Id);
+            Assert.Equal(itemOptions, result.OrderedItems.First().ItemOptions.Select(io => io.Id).ToArray());
+            Assert.Equal(itemCount + 1, result.OrderedItems.First().Count);
+
+            // Verify that ItemNotFoundException is not thrown
+            _itemRepositoryMock.Verify(repo => repo.GetFirstOrDefaultAsync<Item>(
+                It.IsAny<Expression<Func<Item, Item>>>(),
+                It.IsAny<Expression<Func<Item, bool>>>(),
+                null,
+                null,
+                true,
+                CancellationToken.None,
+                false,
+                false), Times.Never);
+
+            _itemOptionRepositoryMock.Verify(repo => repo.GetFirstOrDefaultAsync<ItemOption>(
+                It.IsAny<Expression<Func<ItemOption, ItemOption>>>(),
+                It.IsAny<Expression<Func<ItemOption, bool>>>(),
+                null,
+                null,
+                true,
+                CancellationToken.None,
+                false,
+                false), Times.Never);
         }
+
+
 
         [Fact]
         public async Task RemoveFromCartAsync_ItemExistsInCart_DecrementsItemCount()
@@ -316,7 +384,7 @@ namespace JubilantBroccoli.UnitTests.Services
                 .ReturnsAsync(existingCart);
 
             // Act and Assert
-            await Assert.ThrowsAsync<Exception>(() => _orderService.RemoveFromCartAsync(userId, itemId));
+            await Assert.ThrowsAsync<ItemNotFoundException>(() => _orderService.RemoveFromCartAsync(userId, itemId));
         }
 
         [Fact]
@@ -477,8 +545,7 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var orderService = new OrderService(
                 _unitOfWorkMock.Object,
-                _loggerMock.Object,
-                _userManagerMock.Object);
+                _loggerMock.Object);
 
             // Act
             var result = await orderService.RemoveFromCartAsync(userId, itemId, token);
@@ -527,8 +594,7 @@ namespace JubilantBroccoli.UnitTests.Services
 
             var orderService = new OrderService(
                 _unitOfWorkMock.Object,
-                _loggerMock.Object,
-                _userManagerMock.Object);
+                _loggerMock.Object);
 
             // Act
             var result = await orderService.RemoveFromCartAsync(userId, itemId, token);

@@ -4,13 +4,15 @@ using JubilantBroccoli.Domain.Dtos.Restaurant;
 
 namespace JubilantBroccoli.Domain.Dtos.Order;
 
-public class OrderDto
+public class OrderDtoResponse
 {
     public string Id { get; set; }
     public string? DeliveryAddress { get; set; }
     public OrderStatus Status { get; set; }
-    public List<OrderItemDto> Items { get; set; }
+    public IEnumerable<OrderItemDtoResponse> Items { get; set; }
     public DeliveryType DeliveryType { get; set; }
-    public RestaurantDto Restaurant { get; set; }
+    public RestaurantDtoResponse Restaurant { get; set; }
     public TimeSpan? AverageTimeToReady { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

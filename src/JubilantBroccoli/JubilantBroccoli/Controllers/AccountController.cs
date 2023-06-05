@@ -32,17 +32,26 @@ namespace JubilantBroccoli.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            var userTemplate = new User()
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = user.UserName,
+                Email = user.Email,
+                Address = user.Address
+            };
             var result = await _userManager.CreateAsync(
-                new User() { UserName = user.UserName, Email = user.Email, Address = user.Address },
+                userTemplate,
                 user.Password
             );
+
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
 
-            return Created("", _mapper.Map<UserDto>(user));
+            return Created("", _mapper.Map<UserDto>(userTemplate));
         }
 
         [HttpPost("BearerToken")]

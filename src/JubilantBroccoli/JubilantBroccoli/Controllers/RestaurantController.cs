@@ -23,13 +23,13 @@ public class RestaurantController : Controller
 
     [HttpGet]
     [Route("/restaurants")]
-    public async Task<ActionResult<IPagedList<RestaurantDto>>> GetRestaurants(int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<IPagedList<RestaurantDtoResponse>>> GetRestaurants(int pageNumber = 1, int pageSize = 10)
     {
         var restaurantsPagedList = await _restaurantRepository.GetPagedListAsync(
             selector: x => x
             );
 
-        var response = _mapper.Map<IPagedList<RestaurantDto>>(restaurantsPagedList);
+        var response = _mapper.Map<IPagedList<RestaurantDtoResponse>>(restaurantsPagedList);
 
         return Ok(response);
     }

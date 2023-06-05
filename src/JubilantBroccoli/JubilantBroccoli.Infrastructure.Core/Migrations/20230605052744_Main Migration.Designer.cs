@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JubilantBroccoli.Infrastructure.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230604231711_Main migration")]
-    partial class Mainmigration
+    [Migration("20230605052744_Main Migration")]
+    partial class MainMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,6 +159,7 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId1")
@@ -195,6 +196,10 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrderId1")
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
@@ -211,6 +216,8 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                     b.HasIndex("ItemId");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("OrderedItems", (string)null);
                 });
@@ -518,7 +525,9 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("JubilantBroccoli.Domain.Models.User", null)
                         .WithMany("Orders")
@@ -538,8 +547,14 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         .IsRequired();
 
                     b.HasOne("JubilantBroccoli.Domain.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JubilantBroccoli.Domain.Models.Order", null)
                         .WithMany("OrderedItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId1");
 
                     b.Navigation("Item");
 

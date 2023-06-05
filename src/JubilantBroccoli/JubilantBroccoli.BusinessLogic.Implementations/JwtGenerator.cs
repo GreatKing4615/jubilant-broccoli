@@ -10,7 +10,7 @@ namespace JubilantBroccoli.BusinessLogic.Implementations;
 
 public class JwtGenerator : IJwtGenerator
 {
-    private const int EXPIRATION_MINUTES = 10;
+    private const int EXPIRATION_MINUTES = 100;
 
     private readonly IConfiguration _configuration;
 

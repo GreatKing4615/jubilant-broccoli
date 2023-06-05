@@ -9,12 +9,20 @@ namespace JubilantBroccoli.MapperProfiles
     {
         public ItemOptionMapperConfiguration()
         {
-            CreateMap<ItemOptionDto, ItemOption>()
+            CreateMap<ItemOption, ItemOptionDtoResponse>();
+            CreateMap<ItemOption, OrderedItem>()
+                .ForMember(x => x.Order, y => y.Ignore())
+                .ForMember(x => x.Item, y => y.Ignore())
+                .ForMember(x => x.Status, y => y.Ignore())
+                .ForMember(x => x.Count, y => y.Ignore())
+                .ForMember(x => x.UpdatedAt, y => y.Ignore())
+                .ForMember(x => x.CreatedAt, y => y.Ignore())
+                .ForMember(x => x.ItemOptions, y => y.Ignore())
+                .ForMember(x => x.Id, y => y.MapFrom(q => q.Items.FirstOrDefault(x => x.Id == q.Id)))
+                .ForMember(x => x.ItemId, y => y.MapFrom(q => q.Id))
                 .ReverseMap();
-
-
-            CreateMap<IPagedList<ItemOption>, IPagedList<ItemOptionDto>>()
-                .ConvertUsing<PagedListConverter<ItemOption, ItemOptionDto>>();
+            CreateMap<IPagedList<ItemOption>, IPagedList<ItemOptionDtoResponse>>()
+                .ConvertUsing<PagedListConverter<ItemOption, ItemOptionDtoResponse>>();
         }
     }
 }

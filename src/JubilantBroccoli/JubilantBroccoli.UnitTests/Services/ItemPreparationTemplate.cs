@@ -70,7 +70,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 
@@ -114,7 +114,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 
@@ -149,7 +149,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
         [Fact]
@@ -183,7 +183,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 
@@ -218,7 +218,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 
@@ -253,7 +253,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 
@@ -288,7 +288,7 @@ namespace JubilantBroccoli.UnitTests.Services
             // Assert
             Assert.Equal(OrderStatus.WaitingPickup, order.Status);
             Assert.Equal(ItemStatus.Ready, orderedItem.Status);
-            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(2));
+            _unitOfWorkMock.Verify(u => u.GetRepository<Order>().Update(order), Times.Exactly(3));
             _unitOfWorkMock.Verify(u => u.GetRepository<OrderedItem>().Update(orderedItem), Times.Exactly(2));
         }
 

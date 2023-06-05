@@ -29,7 +29,7 @@ namespace JubilantBroccoli.Controllers
 
         [HttpGet]
         [Route("/current-cart")]
-        public async Task<ActionResult<OrderDto>> GetCurrentCart()
+        public async Task<ActionResult<OrderDtoResponse>> GetCurrentCart()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -39,14 +39,14 @@ namespace JubilantBroccoli.Controllers
             }
 
             var currentCart = await _orderService.GetCurrentCartAsync(userId);
-            var response = _mapper.Map<OrderDto>(currentCart);
+            var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
             return Ok(response);
         }
 
         [HttpPost]
         [Route("/item")]
-        public async Task<ActionResult<OrderDto>> PostCart(OrderItemDto orderedItem)
+        public async Task<ActionResult<OrderDtoResponse>> PostCart(OrderItemDtoRequest orderedItem)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -63,7 +63,7 @@ namespace JubilantBroccoli.Controllers
                     orderedItem.Id,
                     orderedItem.ItemOptionIds);
 
-                var response = _mapper.Map<OrderDto>(currentCart);
+                var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
                 return Ok(response);
 
@@ -76,7 +76,7 @@ namespace JubilantBroccoli.Controllers
 
         [HttpDelete]
         [Route("/item")]
-        public async Task<ActionResult<OrderItemDto>> RemoveItem(string itemId)
+        public async Task<ActionResult<OrderItemDtoResponse>> RemoveItem(string itemId)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -89,14 +89,14 @@ namespace JubilantBroccoli.Controllers
                 itemId
             );
 
-            var response = _mapper.Map<OrderDto>(currentCart);
+            var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
             return Ok(response);
         }
 
         [HttpPost]
         [Route("/status")]
-        public async Task<ActionResult<OrderDto>> ChangeOrderStatus(string orderId, OrderStatus orderStatus)
+        public async Task<ActionResult<OrderDtoResponse>> ChangeOrderStatus(string orderId, OrderStatus orderStatus)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -108,7 +108,7 @@ namespace JubilantBroccoli.Controllers
             {
                 var currentCart = await _orderService.ChangeOrderStatusAsync(orderId, orderStatus);
 
-                var response = _mapper.Map<OrderDto>(currentCart);
+                var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
                 return Ok(response);
             }
@@ -121,7 +121,7 @@ namespace JubilantBroccoli.Controllers
 
         [HttpGet]
         [Route("/user-history")]
-        public async Task<ActionResult<OrderDto>> UserHistory()
+        public async Task<ActionResult<OrderDtoResponse>> UserHistory()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -131,14 +131,14 @@ namespace JubilantBroccoli.Controllers
 
             var currentCart = await _orderService.GetOrderHistoryAsync(userId);
 
-            var response = _mapper.Map<OrderDto>(currentCart);
+            var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
             return Ok(response);
         }
 
         [HttpPost]
         [Route("/clear-cart")]
-        public async Task<ActionResult<OrderDto>> ClearCart()
+        public async Task<ActionResult<OrderDtoResponse>> ClearCart()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -148,14 +148,14 @@ namespace JubilantBroccoli.Controllers
 
             var currentCart = await _orderService.ClearCartAsync(userId);
 
-            var response = _mapper.Map<OrderDto>(currentCart);
+            var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
             return Ok(response);
         }
 
         [HttpPost]
         [Route("/order-detail")]
-        public async Task<ActionResult<OrderDto>> OrderDetail()
+        public async Task<ActionResult<OrderDtoResponse>> OrderDetail()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -165,7 +165,7 @@ namespace JubilantBroccoli.Controllers
 
             var currentCart = await _orderService.ClearCartAsync(userId);
 
-            var response = _mapper.Map<OrderDto>(currentCart);
+            var response = _mapper.Map<OrderDtoResponse>(currentCart);
 
             return Ok(response);
         }

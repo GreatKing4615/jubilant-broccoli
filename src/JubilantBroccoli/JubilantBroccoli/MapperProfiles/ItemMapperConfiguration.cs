@@ -9,9 +9,9 @@ public class ItemMapperConfiguration : Profile
 {
     public ItemMapperConfiguration()
     {
-        CreateMap<Item, ItemDto>().ReverseMap();
+        CreateMap<Item, ItemDtoResponse>();
 
-        CreateMap<IPagedList<Item>, IPagedList<ItemDto>>()
-            .ConvertUsing<PagedListConverter<Item, ItemDto>>();
+        CreateMap<IPagedList<Item>, IPagedList<ItemDtoResponse>>()
+            .ConvertUsing<PagedListConverter<Item, ItemDtoResponse>>();
     }
 }

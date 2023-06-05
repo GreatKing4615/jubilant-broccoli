@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JubilantBroccoli.Infrastructure.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Mainmigration : Migration
+    public partial class MainMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,9 +74,9 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    ItemTypes = table.Column<List<int>>(type: "integer[]", maxLength: 300, nullable: false),
                     Opening = table.Column<TimeSpan>(type: "interval", maxLength: 300, nullable: false),
-                    Closing = table.Column<TimeSpan>(type: "interval", maxLength: 300, nullable: false)
+                    Closing = table.Column<TimeSpan>(type: "interval", maxLength: 300, nullable: false),
+                    ItemTypes = table.Column<List<int>>(type: "integer[]", maxLength: 300, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,12 +237,12 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     DeliveryAddress = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    Status = table.Column<int>(type: "integer", maxLength: 300, nullable: false),
-                    DeliveryType = table.Column<int>(type: "integer", maxLength: 300, nullable: false),
                     DeliveryTime = table.Column<TimeSpan>(type: "interval", maxLength: 300, nullable: false),
                     RestaurantId = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    DeliveryType = table.Column<int>(type: "integer", maxLength: 300, nullable: false),
+                    Status = table.Column<int>(type: "integer", maxLength: 300, nullable: false),
                     RestaurantId1 = table.Column<string>(type: "text", nullable: true),
                     UserId1 = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", maxLength: 300, nullable: false),
@@ -255,7 +255,8 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                         name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
@@ -279,10 +280,11 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    OrderId = table.Column<string>(type: "text", nullable: true),
+                    OrderId = table.Column<string>(type: "text", nullable: false),
                     ItemId = table.Column<string>(type: "text", nullable: false),
                     Count = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    OrderId1 = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", maxLength: 300, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", maxLength: 300, nullable: true)
                 },
@@ -298,6 +300,12 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                     table.ForeignKey(
                         name: "FK_OrderedItems_Orders_OrderId",
                         column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderedItems_Orders_OrderId1",
+                        column: x => x.OrderId1,
                         principalTable: "Orders",
                         principalColumn: "Id");
                 });
@@ -426,6 +434,11 @@ namespace JubilantBroccoli.Infrastructure.Core.Migrations
                 name: "IX_OrderedItems_OrderId",
                 table: "OrderedItems",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderedItems_OrderId1",
+                table: "OrderedItems",
+                column: "OrderId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_RestaurantId",
